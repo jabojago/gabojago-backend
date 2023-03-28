@@ -1,8 +1,8 @@
 package com.example.gabojago_server.config;
 
-import com.example.gabojago_server.security.JwtAccessDeniedHandler;
-import com.example.gabojago_server.security.JwtAuthenticationEntryPoint;
-import com.example.gabojago_server.security.JwtTokenProvider;
+import com.example.gabojago_server.jwt.JwtAccessDeniedHandler;
+import com.example.gabojago_server.jwt.JwtAuthenticationEntryPoint;
+import com.example.gabojago_server.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

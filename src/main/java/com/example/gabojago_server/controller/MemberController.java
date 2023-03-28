@@ -4,11 +4,8 @@ import com.example.gabojago_server.dto.ChangePasswordRequestDto;
 import com.example.gabojago_server.dto.ChangePhoneRequestDto;
 import com.example.gabojago_server.dto.MemberRequestDto;
 import com.example.gabojago_server.dto.MemberResponseDto;
-import com.example.gabojago_server.security.JwtTokenProvider;
 import com.example.gabojago_server.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

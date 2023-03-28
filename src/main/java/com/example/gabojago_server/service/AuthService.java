@@ -6,7 +6,7 @@ import com.example.gabojago_server.dto.MemberResponseDto;
 import com.example.gabojago_server.dto.TokenDto;
 import com.example.gabojago_server.model.Member;
 import com.example.gabojago_server.repository.MemberRepository;
-import com.example.gabojago_server.security.JwtTokenProvider;
+import com.example.gabojago_server.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;

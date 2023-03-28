@@ -1,7 +1,7 @@
 package com.example.gabojago_server.config;
 
-import com.example.gabojago_server.security.JwtAuthenticationFilter;
-import com.example.gabojago_server.security.JwtTokenProvider;
+import com.example.gabojago_server.jwt.JwtAuthenticationFilter;
+import com.example.gabojago_server.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
