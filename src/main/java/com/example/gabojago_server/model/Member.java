@@ -1,7 +1,6 @@
 package com.example.gabojago_server.model;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Objects;
