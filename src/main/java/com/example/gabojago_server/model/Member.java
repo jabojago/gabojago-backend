@@ -4,13 +4,12 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Entity
 @Table(name="member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@SuperBuilder @Builder
 public class Member extends BaseTimeEntity {
 
     @Id
@@ -38,6 +37,19 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+
+    @Builder
+    public Member(String email, String password, String name, String nickname, String birth, String phone,
+                  Authority authority){
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.birth = birth;
+        this.phone = phone;
+        this.authority = authority;
+    }
+
     public void updatePassword(String password){
         this.password = password;
     }
@@ -48,6 +60,19 @@ public class Member extends BaseTimeEntity {
 
     public void updatePhone(String phone){
         this.phone = phone;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        else if (!(obj instanceof Member)) return false;
+        Member member = (Member) obj;
+        return Objects.equals(useridx, member.getUseridx());
+    }
+
+    @Override
+    public int hashCode(){
+        return useridx != null ? useridx.hashCode() : 0;
     }
 
 }
