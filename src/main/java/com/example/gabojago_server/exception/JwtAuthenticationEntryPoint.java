@@ -1,4 +1,4 @@
-package com.example.gabojago_server.jwt;
+package com.example.gabojago_server.exception;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

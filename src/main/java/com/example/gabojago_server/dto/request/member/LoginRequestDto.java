@@ -1,11 +1,7 @@
-package com.example.gabojago_server.dto;
+package com.example.gabojago_server.dto.request.member;
 
-import com.example.gabojago_server.model.Authority;
-import com.example.gabojago_server.model.Member;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

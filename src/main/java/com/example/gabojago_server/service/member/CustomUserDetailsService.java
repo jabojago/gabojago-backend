@@ -1,7 +1,7 @@
-package com.example.gabojago_server.service;
+package com.example.gabojago_server.service.member;
 
-import com.example.gabojago_server.model.Member;
-import com.example.gabojago_server.repository.MemberRepository;
+import com.example.gabojago_server.model.member.Member;
+import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

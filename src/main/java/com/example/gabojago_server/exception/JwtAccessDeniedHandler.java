@@ -1,4 +1,4 @@
-package com.example.gabojago_server.jwt;
+package com.example.gabojago_server.exception;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

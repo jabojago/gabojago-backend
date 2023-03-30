@@ -1,6 +1,6 @@
-package com.example.gabojago_server.dto;
+package com.example.gabojago_server.dto.response.member;
 
-import com.example.gabojago_server.model.Member;
+import com.example.gabojago_server.model.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

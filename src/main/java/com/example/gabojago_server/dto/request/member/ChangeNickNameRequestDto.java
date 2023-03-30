@@ -1,4 +1,4 @@
-package com.example.gabojago_server.dto;
+package com.example.gabojago_server.dto.request.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

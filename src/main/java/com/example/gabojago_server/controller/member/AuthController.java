@@ -1,10 +1,10 @@
-package com.example.gabojago_server.controller;
+package com.example.gabojago_server.controller.member;
 
-import com.example.gabojago_server.dto.LoginRequestDto;
-import com.example.gabojago_server.dto.MemberRequestDto;
-import com.example.gabojago_server.dto.MemberResponseDto;
+import com.example.gabojago_server.dto.request.member.LoginRequestDto;
+import com.example.gabojago_server.dto.request.member.MemberRequestDto;
+import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.dto.TokenDto;
-import com.example.gabojago_server.service.AuthService;
+import com.example.gabojago_server.service.member.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

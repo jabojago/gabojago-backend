@@ -1,6 +1,6 @@
-package com.example.gabojago_server.repository;
+package com.example.gabojago_server.repository.member;
 
-import com.example.gabojago_server.model.Member;
+import com.example.gabojago_server.model.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
