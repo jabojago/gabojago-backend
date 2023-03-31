@@ -1,5 +1,6 @@
 package com.example.gabojago_server.model.member;
 
+import com.example.gabojago_server.model.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
