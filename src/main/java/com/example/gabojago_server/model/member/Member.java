@@ -1,14 +1,17 @@
 package com.example.gabojago_server.model.member;
 
 import com.example.gabojago_server.model.common.BaseTimeEntity;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
 @Entity
-@Table(name="member")
+@Table(name = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
 
@@ -19,7 +22,6 @@ public class Member extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
@@ -31,7 +33,6 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String birth;
 
-    @Column(unique = true, nullable = false)
     private String phone;
 
     @Enumerated(EnumType.STRING)
@@ -40,7 +41,7 @@ public class Member extends BaseTimeEntity {
 
     @Builder
     public Member(String email, String password, String name, String nickname, String birth, String phone,
-                  Authority authority){
+                  Authority authority) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -50,15 +51,15 @@ public class Member extends BaseTimeEntity {
         this.authority = authority;
     }
 
-    public void updatePassword(String password){
+    public void updatePassword(String password) {
         this.password = password;
     }
 
-    public void updateNickName(String nickname){
+    public void updateNickName(String nickname) {
         this.nickname = nickname;
     }
 
-    public void updatePhone(String phone){
+    public void updatePhone(String phone) {
         this.phone = phone;
     }
 
@@ -71,7 +72,7 @@ public class Member extends BaseTimeEntity {
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return useridx != null ? useridx.hashCode() : 0;
     }
 
