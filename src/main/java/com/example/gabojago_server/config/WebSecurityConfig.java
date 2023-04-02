@@ -1,14 +1,15 @@
 package com.example.gabojago_server.config;
 
-import com.example.gabojago_server.exception.JwtAccessDeniedHandler;
-import com.example.gabojago_server.exception.JwtAuthenticationEntryPoint;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
+import com.example.gabojago_server.security.LoginAuthenticationConfigurer;
+import com.example.gabojago_server.security.oauth2.OAuth2CustomerService;
+import com.example.gabojago_server.security.provider.CustomUserDetailsService;
+import com.example.gabojago_server.security.provider.LoginAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -19,37 +20,35 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class WebSecurityConfig {
-
     private final JwtTokenProvider jwtTokenProvider;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final OAuth2CustomerService oAuth2CustomerService;
 
     //회원 패스워드 암호화해서 저장해야 함
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.httpBasic().disable()  //rest api이므로 기본 설정 사용 x(https만 사용)
                 .csrf().disable()   //rest api이므로 csrf 보안 사용 x
                 .formLogin().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)     //jwt 사용하므로 세션 사용 x
-                .and()
-                    .exceptionHandling()
-                    .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                    .accessDeniedHandler(jwtAccessDeniedHandler)
-                .and()
-                    //회원가입, 로그인 페이지 제외 모든 request는 토큰 필요하게
-                    .authorizeRequests()
-                    .antMatchers("/members/signup").permitAll()
-                    .antMatchers("/members/login").permitAll()
-                    .anyRequest().authenticated()
+                .authorizeRequests()
+                .antMatchers("/auth/signup").permitAll()
+                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/login/**").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
 
-
+        http.oauth2Login().defaultSuccessUrl("/auth/token").userInfoEndpoint().userService(oAuth2CustomerService);
+        http.authenticationProvider(new LoginAuthenticationProvider(customUserDetailsService, passwordEncoder()));
+        http.apply(new LoginAuthenticationConfigurer());
         return http.build();
     }
+
+
 }
