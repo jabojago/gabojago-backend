@@ -38,3 +38,4 @@ out/
 .idea\
 .gradle\
 application.properties
+application.yml

@@ -1,4 +1,4 @@
-package com.example.gabojago_server.controller.member;
+package com.example.gabojago_server.web.controller.member;
 
 import com.example.gabojago_server.dto.request.member.ChangePasswordRequestDto;
 import com.example.gabojago_server.dto.request.member.ChangePhoneRequestDto;
@@ -37,7 +37,7 @@ public class MemberController {
     }
 
     @PostMapping("/phone")
-    public ResponseEntity<MemberResponseDto> setMemberPhone(@RequestBody @Valid ChangePhoneRequestDto request){
+    public ResponseEntity<MemberResponseDto> setMemberPhone(@RequestBody @Valid ChangePhoneRequestDto request) {
         return ResponseEntity.ok(memberService.changePhone(request.getEmail(), request.getPhone()));
     }
 

@@ -1,4 +1,4 @@
-package com.example.gabojago_server.controller;
+package com.example.gabojago_server.web.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @RequestMapping("/")
-    public String home(){
+    public String home() {
         return "home";
     }
 }

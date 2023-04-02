@@ -1,21 +1,17 @@
-package com.example.gabojago_server.controller.member;
+package com.example.gabojago_server.web.controller.member;
 
-import com.example.gabojago_server.dto.request.member.LoginRequestDto;
+import com.example.gabojago_server.dto.TokenDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
-import com.example.gabojago_server.dto.TokenDto;
 import com.example.gabojago_server.service.member.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -26,8 +22,9 @@ public class AuthController {
         return ResponseEntity.ok(authService.joinMember(requestDto));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody @Valid LoginRequestDto requestDto) {
-        return ResponseEntity.ok(authService.loginMember(requestDto));
+    @GetMapping("/token")
+    public ResponseEntity<TokenDto> login(TokenDto tokenDto) {
+        return ResponseEntity.ok(tokenDto);
     }
+
 }

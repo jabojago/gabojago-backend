@@ -1,4 +1,4 @@
-package com.example.gabojago_server.model.member;
+package com.example.gabojago_server.model.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
