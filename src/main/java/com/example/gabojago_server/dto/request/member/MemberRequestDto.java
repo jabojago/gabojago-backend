@@ -2,7 +2,10 @@ package com.example.gabojago_server.dto.request.member;
 
 import com.example.gabojago_server.model.member.Authority;
 import com.example.gabojago_server.model.member.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -35,10 +38,10 @@ public class MemberRequestDto {
     private String birth;
 
     @NotBlank(message = "핸드폰번호는 필수 입력 값입니다.")
-    @Pattern(regexp = "^[0-9]+-[0-9]+-[0-9]$", message = "번호 형식이 올바르지 않습니다.")
+    @Pattern(regexp = "^[0-9]{3}+-[0-9]{4}+-[0-9]{4}$", message = "번호 형식이 올바르지 않습니다.")
     private String phone;
 
-    public Member toMember(PasswordEncoder passwordEncoder){
+    public Member toMember(PasswordEncoder passwordEncoder) {
         return Member.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
@@ -49,8 +52,8 @@ public class MemberRequestDto {
                 .authority(Authority.ROLE_USER)
                 .build();
     }
-    
-    public UsernamePasswordAuthenticationToken toAuthentication(){
+
+    public UsernamePasswordAuthenticationToken toAuthentication() {
         return new UsernamePasswordAuthenticationToken(email, password);
     }
 

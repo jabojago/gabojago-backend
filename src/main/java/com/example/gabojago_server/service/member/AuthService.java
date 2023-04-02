@@ -1,12 +1,12 @@
 package com.example.gabojago_server.service.member;
 
+import com.example.gabojago_server.dto.TokenDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
-import com.example.gabojago_server.dto.TokenDto;
+import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.member.MemberRepository;
-import com.example.gabojago_server.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
