@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -22,7 +22,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.joinMember(requestDto));
     }
 
-    @GetMapping("/login")
+    @GetMapping("/token")
     public ResponseEntity<TokenDto> login(TokenDto tokenDto) {
         return ResponseEntity.ok(tokenDto);
     }
