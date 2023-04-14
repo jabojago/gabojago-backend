@@ -4,7 +4,7 @@ import com.example.gabojago_server.config.JpaConfig;
 import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.example.gabojago_server.model.articlecomment.ArticleComment;
 import com.example.gabojago_server.model.member.Member;
-import com.example.gabojago_server.repository.article.AccompanyRepository;
+import com.example.gabojago_server.repository.article.ArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ class ArticleCommentRepositoryTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private AccompanyRepository accompanyRepository;
+    private ArticleRepository articleRepository;
 
     @Autowired
     private ArticleCommentRepository articleCommentRepository;
@@ -35,7 +35,7 @@ class ArticleCommentRepositoryTest {
         Member writer = stubMember();
         memberRepository.save(writer);
         AccompanyArticle accompanyArticle = stubAccompany(writer);
-        accompanyRepository.save(accompanyArticle);
+        articleRepository.save(accompanyArticle);
 
         ArticleComment articleComment = ArticleComment.builder()
                 .article(accompanyArticle)
