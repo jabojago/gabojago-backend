@@ -1,7 +1,10 @@
 package com.example.gabojago_server.model.article;
 
 import com.example.gabojago_server.model.member.Member;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -26,17 +29,31 @@ public class AccompanyArticle extends Article {
 
     private int recruitNumber; // 모집인원
 
-    @Builder
-    public AccompanyArticle(Member writer, String title,
-                            String content, String region,
-                            LocalDate startDate, LocalDate endDate,
-                            int recruitNumber) {
-        this.writer = writer;
-        this.title = title;
-        this.content = content;
-        this.region = region;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.recruitNumber = recruitNumber;
+    public static AccompanyArticle createAccompanyArticle(Member writer, String title,
+                                                          String content, int review, String region,
+                                                          LocalDate startDate, LocalDate endDate,
+                                                          int recruitNumber) {
+        AccompanyArticle article = new AccompanyArticle();
+        article.writer = writer;
+        article.title = title;
+        article.content = content;
+        article.review = review;
+        article.region = region;
+        article.startDate = startDate;
+        article.endDate = endDate;
+        article.recruitNumber = recruitNumber;
+        return article;
+    }
+
+    public static AccompanyArticle update(AccompanyArticle article, String title, String content, String region,
+                                          LocalDate startDate, LocalDate endDate,
+                                          int recruitNumber) {
+        article.title = title;
+        article.content = content;
+        article.region = region;
+        article.startDate = startDate;
+        article.endDate = endDate;
+        article.recruitNumber = recruitNumber;
+        return article;
     }
 }

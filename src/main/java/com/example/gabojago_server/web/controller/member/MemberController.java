@@ -1,8 +1,8 @@
 package com.example.gabojago_server.web.controller.member;
 
+import com.example.gabojago_server.dto.request.member.ChangeNickNameRequestDto;
 import com.example.gabojago_server.dto.request.member.ChangePasswordRequestDto;
 import com.example.gabojago_server.dto.request.member.ChangePhoneRequestDto;
-import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class MemberController {
     }
 
     @PostMapping("/nickname")
-    public ResponseEntity<MemberResponseDto> setMemberNickname(@RequestBody @Valid MemberRequestDto request) {
+    public ResponseEntity<MemberResponseDto> setMemberNickname(@RequestBody @Valid ChangeNickNameRequestDto request) {
         return ResponseEntity.ok(memberService.changeNickname(request.getEmail(), request.getNickname()));
     }
 

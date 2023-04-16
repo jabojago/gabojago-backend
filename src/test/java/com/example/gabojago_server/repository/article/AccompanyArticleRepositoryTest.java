@@ -18,7 +18,7 @@ import java.time.LocalDate;
 class AccompanyArticleRepositoryTest {
 
     @Autowired
-    private AccompanyRepository accompanyRepository;
+    private ArticleRepository articleRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -41,7 +41,7 @@ class AccompanyArticleRepositoryTest {
                 .build();
         // when
 
-        accompanyRepository.save(accompanyArticle);
+        articleRepository.save(accompanyArticle);
 
         // then
 

@@ -34,6 +34,11 @@ public class ArticleComment extends BaseTimeEntity {
         this.content = content;
     }
 
+    public static ArticleComment update(ArticleComment comment, String content) {
+        comment.content = content;
+        return comment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
