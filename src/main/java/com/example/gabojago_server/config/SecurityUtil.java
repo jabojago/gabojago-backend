@@ -9,12 +9,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 public class SecurityUtil {
 
-    public static Long getCurrentMemberIdx(){
+    public static Long getCurrentMemberIdx() {
         //JwtAuthenticationFilter에서 저장한 유저 정보 꺼내기
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication == null || authentication.getName()==null){
-            throw new RuntimeException("Security Context에 인증 정보가 없습니다.");
+        if (authentication == null || authentication.getName() == null) {
+            return 0L;
         }
 
         //userIdx return

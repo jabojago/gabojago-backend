@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 @Component
 @Transactional
 @RequiredArgsConstructor
@@ -25,18 +27,21 @@ public class OAuth2CustomerService extends DefaultOAuth2UserService {
 
         KakaoMember kakaoMember = new KakaoMember(oAuth2User.getAttributes());
 
-        if (!memberRepository.existsByEmail(kakaoMember.getEmail())) {
-            Member member = Member.builder()
-                    .authority(Authority.ROLE_USER)
-                    .birth(kakaoMember.getBirthday())
-                    .email(kakaoMember.getEmail())
-                    .nickname(kakaoMember.getEmail())
-                    .name(kakaoMember.getName())
-                    .build();
+        Member member = memberRepository.findByEmail(kakaoMember.getEmail())
+                .orElse(createAndSave(kakaoMember));
 
-            memberRepository.save(member);
-        }
-        return new DefaultOAuth2User(oAuth2User.getAuthorities(), oAuth2User.getAttributes(), "id");
+        return new DefaultOAuth2User(oAuth2User.getAuthorities(), Map.of("id", member.getId()), "id");
+    }
+
+    private Member createAndSave(KakaoMember kakaoMember) {
+        Member member = Member.builder()
+                .authority(Authority.ROLE_USER)
+                .birth(kakaoMember.getBirthday())
+                .email(kakaoMember.getEmail())
+                .nickname(kakaoMember.getEmail())
+                .name(kakaoMember.getName())
+                .build();
+        return memberRepository.save(member);
     }
 
 }
