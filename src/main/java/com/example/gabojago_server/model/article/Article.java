@@ -15,13 +15,16 @@ import java.util.Objects;
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
 @ToString(exclude = "writer")
+@Table(name = "articles")
 public abstract class Article extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "article_id")
     protected Long id;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "member_id")
     protected Member writer;
 
     @Column(nullable = false)

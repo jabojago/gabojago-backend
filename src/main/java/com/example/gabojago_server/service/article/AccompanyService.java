@@ -1,6 +1,5 @@
 package com.example.gabojago_server.service.article;
 
-import com.example.gabojago_server.config.SecurityUtil;
 import com.example.gabojago_server.dto.response.article.AccompanyResponseDto;
 import com.example.gabojago_server.dto.response.article.PageAccompanyResponseDto;
 import com.example.gabojago_server.model.article.AccompanyArticle;
@@ -9,15 +8,11 @@ import com.example.gabojago_server.repository.article.ArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,60 +21,39 @@ public class AccompanyService {
     private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
 
-    public AccompanyResponseDto oneAccompany(Long id) {
-        AccompanyArticle article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("글이 없습니다."));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || authentication.getPrincipal() == "anonymousUser") {
-            article.reviewCountUp();
-            return AccompanyResponseDto.of(article, false);
-        } else {
-            Member member = memberRepository.findById(Long.parseLong(authentication.getName())).orElseThrow();
-            boolean isWritten = article.getWriter().equals(member);
-            article.reviewCountUp();
-            return AccompanyResponseDto.of(article, isWritten);
-        }
+    public AccompanyResponseDto oneAccompany(Long writerId, Long articleId) {
+        AccompanyArticle article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        article.reviewCountUp();
+        if (isOwner(writerId, articleId)) return AccompanyResponseDto.of(article, false);
+        else return AccompanyResponseDto.of(article, true);
     }
 
-    public List<PageAccompanyResponseDto> allAccompany() {
-        List<AccompanyArticle> accompanyArticles = articleRepository.findAll();
-        return accompanyArticles.stream()
-                .map(PageAccompanyResponseDto::of)
-                .collect(Collectors.toList());
+    private boolean isOwner(Long writerId, Long articleId) {
+        if (writerId == null) return false;
+        return articleRepository.existArticleByWriter(writerId, articleId);
     }
 
-    public Page<PageAccompanyResponseDto> pageAccompany(int pageNum) {
-        return articleRepository.searchAll(PageRequest.of(pageNum - 1, 20));
+    public Page<PageAccompanyResponseDto> allAccompany(Pageable pageable) {
+        return articleRepository
+                .findAll(pageable)
+                .map(PageAccompanyResponseDto::of);
     }
 
     @Transactional
-    public AccompanyResponseDto postAccompany(String title, String content,
+    public AccompanyResponseDto postAccompany(Long writerId, String title, String content,
                                               String region, LocalDate startDate, LocalDate endDate,
                                               int recruitNumber) {
-        Member writer = isMember();
+        Member writer = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
         AccompanyArticle article = AccompanyArticle.createAccompanyArticle(writer, title, content, 0, region,
                 startDate, endDate, recruitNumber);
         return AccompanyResponseDto.of(articleRepository.save(article), true);
     }
 
-    public Member isMember() {
-        return memberRepository.findById(SecurityUtil.getCurrentMemberIdx())
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
-    }
-
-    public AccompanyArticle authorizationAccompanyWriter(Long id) {
-        Member member = isMember();
-        AccompanyArticle article = articleRepository.findById(id).orElseThrow(() -> new RuntimeException("글이 없습니다."));
-        if (!article.getWriter().equals(member)) {
-            throw new RuntimeException("로그인한 유저와 작성 유저가 같지 않습니다.");
-        }
-        return article;
-    }
-
     @Transactional
-    public AccompanyResponseDto changeAccompanyArticle(Long id, String title, String content,
+    public AccompanyResponseDto changeAccompanyArticle(Long writerId, Long articleId, String title, String content,
                                                        String region, LocalDate startDate,
                                                        LocalDate endDate, int recruitMember) {
-        AccompanyArticle article = authorizationAccompanyWriter(id);
+        AccompanyArticle article = authorizationAccompanyWriter(writerId, articleId);
         return AccompanyResponseDto.of(
                 articleRepository.save(
                         AccompanyArticle.update(
@@ -90,8 +64,17 @@ public class AccompanyService {
     }
 
     @Transactional
-    public void deleteAccompanyArticle(Long id) {
-        AccompanyArticle article = authorizationAccompanyWriter(id);
+    public void deleteAccompanyArticle(Long writerId, Long articleId) {
+        AccompanyArticle article = authorizationAccompanyWriter(writerId, articleId);
         articleRepository.delete(article);
+    }
+
+    private AccompanyArticle authorizationAccompanyWriter(Long writerId, Long articleId) {
+        Member member = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
+        AccompanyArticle article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        if (!article.getWriter().equals(member)) {
+            throw new RuntimeException("로그인한 유저와 작성 유저가 같지 않습니다.");
+        }
+        return article;
     }
 }

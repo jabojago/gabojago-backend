@@ -4,6 +4,7 @@ import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.common.BaseTimeEntity;
 import com.example.gabojago_server.model.member.Member;
 import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -19,9 +20,11 @@ public class ArticleComment extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "article_id")
     private Article article;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "member_id")
     private Member writer;
 
     @Column(nullable = false, length = 500)
@@ -37,6 +40,10 @@ public class ArticleComment extends BaseTimeEntity {
     public static ArticleComment update(ArticleComment comment, String content) {
         comment.content = content;
         return comment;
+    }
+
+    public void update(String content) {
+        if (StringUtils.hasText(content)) this.content = content;
     }
 
     @Override

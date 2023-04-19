@@ -17,7 +17,8 @@ public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long useridx;
+    @Column(name = "member_id")
+    private Long id;
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -68,12 +69,12 @@ public class Member extends BaseTimeEntity {
         if (this == obj) return true;
         else if (!(obj instanceof Member)) return false;
         Member member = (Member) obj;
-        return Objects.equals(useridx, member.getUseridx());
+        return Objects.equals(id, member.getId());
     }
 
     @Override
     public int hashCode() {
-        return useridx != null ? useridx.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
     }
 
 }

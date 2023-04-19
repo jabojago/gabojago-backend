@@ -1,6 +1,5 @@
 package com.example.gabojago_server.service.comment;
 
-import com.example.gabojago_server.config.SecurityUtil;
 import com.example.gabojago_server.dto.response.comment.CommentResponseDto;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.articlecomment.ArticleComment;
@@ -30,7 +29,7 @@ public class CommentService {
     private final ArticleCommentRepository commentRepository;
 
     public List<CommentResponseDto> getAllComments(Long articleId) {
-        Article article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("게시글이 없습니다."));
         List<ArticleComment> comments = commentRepository.findAllByArticle(article);
 
         if (comments.isEmpty())
@@ -70,13 +69,11 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto createComment(Long articleId, String content) {
-        Member member = memberRepository.findById(
-                        SecurityUtil.getCurrentMemberIdx())
+    public CommentResponseDto createComment(Long writerId, Long articleId, String content) {
+        Member member = memberRepository.findById(writerId)
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new RuntimeException("글이 없습니다."));
-
         ArticleComment comment = ArticleComment.builder()
                 .content(content)
                 .article(article)
@@ -87,9 +84,8 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto changeComment(Long commentId, String content) {
-        Member member = memberRepository.findById(
-                        SecurityUtil.getCurrentMemberIdx())
+    public CommentResponseDto changeComment(Long writerId, Long commentId, String content) {
+        Member member = memberRepository.findById(writerId)
                 .orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
         ArticleComment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
@@ -103,9 +99,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void removeComment(Long commentId) {
-        Member member = memberRepository.findById(
-                        SecurityUtil.getCurrentMemberIdx())
+    public void removeComment(Long writerId, Long commentId) {
+        Member member = memberRepository.findById(writerId)
                 .orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
         ArticleComment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RuntimeException("댓글이 없습니다."));

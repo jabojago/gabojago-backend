@@ -1,5 +1,6 @@
 package com.example.gabojago_server.web.controller.comment;
 
+import com.example.gabojago_server.config.SecurityUtil;
 import com.example.gabojago_server.dto.request.comment.CommentRequestDto;
 import com.example.gabojago_server.dto.response.comment.CommentResponseDto;
 import com.example.gabojago_server.service.comment.CommentService;
@@ -24,17 +25,21 @@ public class CommentController {
 
     @PostMapping("/{postId}")
     public ResponseEntity<CommentResponseDto> postComment(@PathVariable(value = "postId") Long postId, @RequestBody CommentRequestDto request) {
-        return ResponseEntity.ok(commentService.createComment(postId, request.getContent()));
+        return ResponseEntity.ok(commentService.createComment(findMemberId(), postId, request.getContent()));
     }
 
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> changeComment(@PathVariable(value = "commentId") Long commentId, @RequestBody CommentRequestDto request) {
-        return ResponseEntity.ok(commentService.changeComment(commentId, request.getContent()));
+        return ResponseEntity.ok(commentService.changeComment(findMemberId(), commentId, request.getContent()));
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable(value = "commentId") Long commentId) {
-        commentService.removeComment(commentId);
+        commentService.removeComment(findMemberId(), commentId);
         return ResponseEntity.ok(new String("Success".getBytes(), StandardCharsets.UTF_8));
+    }
+
+    private Long findMemberId() {
+        return SecurityUtil.getCurrentMemberIdx();
     }
 }
