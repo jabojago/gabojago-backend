@@ -37,6 +37,7 @@ out/
 .vscode/
 .idea\
 .gradle\
+*.yml
 application.properties
 application.ymlapplication-oauth.properties
 application-oauth.properties
