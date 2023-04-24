@@ -1,4 +1,4 @@
-package com.example.gabojago_server.repository.article;
+package com.example.gabojago_server.repository.article.accompany;
 
 import com.example.gabojago_server.dto.response.article.PageAccompanyResponseDto;
 import com.example.gabojago_server.model.article.AccompanyArticle;
@@ -16,7 +16,7 @@ import static com.example.gabojago_server.model.article.QAccompanyArticle.accomp
 
 @Repository
 @RequiredArgsConstructor
-public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
+public class AccompanyArticleRepositoryImpl implements AccompanyArticleRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override

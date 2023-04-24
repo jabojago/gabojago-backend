@@ -4,7 +4,7 @@ import com.example.gabojago_server.dto.response.article.AccompanyResponseDto;
 import com.example.gabojago_server.dto.response.article.PageAccompanyResponseDto;
 import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.example.gabojago_server.model.member.Member;
-import com.example.gabojago_server.repository.article.ArticleRepository;
+import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AccompanyService {
-    private final ArticleRepository articleRepository;
+    private final AccompanyArticleRepository articleRepository;
     private final MemberRepository memberRepository;
 
     public AccompanyResponseDto oneAccompany(Long writerId, Long articleId) {
@@ -71,7 +71,7 @@ public class AccompanyService {
 
     private AccompanyArticle authorizationAccompanyWriter(Long writerId, Long articleId) {
         Member member = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
-        AccompanyArticle article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        AccompanyArticle article = (AccompanyArticle) articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
         if (!article.getWriter().equals(member)) {
             throw new RuntimeException("로그인한 유저와 작성 유저가 같지 않습니다.");
         }
