@@ -1,6 +1,6 @@
 package com.example.gabojago_server.service.article;
 
-import com.example.gabojago_server.dto.response.article.QnaResponseDto;
+import com.example.gabojago_server.dto.response.article.qna.QnaResponseDto;
 import com.example.gabojago_server.repository.article.Qna.QnaArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;

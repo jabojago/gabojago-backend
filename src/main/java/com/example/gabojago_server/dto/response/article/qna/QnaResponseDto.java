@@ -1,4 +1,4 @@
-package com.example.gabojago_server.dto.response.article;
+package com.example.gabojago_server.dto.response.article.qna;
 
 import com.example.gabojago_server.model.article.QnaArticle;
 import com.example.gabojago_server.model.member.Member;

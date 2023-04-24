@@ -2,8 +2,8 @@ package com.example.gabojago_server.web.controller.article;
 
 import com.example.gabojago_server.config.SecurityUtil;
 import com.example.gabojago_server.dto.request.article.AccompanyRequestDto;
-import com.example.gabojago_server.dto.response.article.AccompanyResponseDto;
-import com.example.gabojago_server.dto.response.article.PageAccompanyResponseDto;
+import com.example.gabojago_server.dto.response.article.accompany.AccompanyResponseDto;
+import com.example.gabojago_server.dto.response.article.accompany.PageAccompanyResponseDto;
 import com.example.gabojago_server.service.article.AccompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

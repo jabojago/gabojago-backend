@@ -1,6 +1,6 @@
 package com.example.gabojago_server.repository.article.accompany;
 
-import com.example.gabojago_server.dto.response.article.PageAccompanyResponseDto;
+import com.example.gabojago_server.dto.response.article.accompany.PageAccompanyResponseDto;
 import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
