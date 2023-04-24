@@ -7,4 +7,6 @@ public class QnaRequestDto {
     private String title;
 
     private String content;
+
+    private boolean selected;
 }

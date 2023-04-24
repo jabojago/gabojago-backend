@@ -38,9 +38,9 @@ public class QnaService {
     }
 
     @Transactional
-    public QnaResponseDto postQna(Long writerId, String title, String content) {
+    public QnaResponseDto postQna(Long writerId, String title, String content, boolean selected) {
         Member writer = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
-        QnaArticle article = QnaArticle.createQnaArticle(writer, title, content, 0, false);
+        QnaArticle article = QnaArticle.createQnaArticle(writer, title, content, 0, selected);
         return QnaResponseDto.of(qnaArticleRepository.save(article), true);
     }
 

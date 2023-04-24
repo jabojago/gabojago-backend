@@ -33,7 +33,7 @@ public class QnaResponseDto {
                 .title(article.getTitle())
                 .content(article.getContent())
                 .review(article.getReview())
-                .selected(article.selected())
+                .selected(article.isSelected())
                 .isWritten(isWritten)
                 .build();
     }

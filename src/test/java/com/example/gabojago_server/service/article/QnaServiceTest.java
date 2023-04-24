@@ -41,7 +41,7 @@ class QnaServiceTest {
 
         //when
         QnaResponseDto response =
-                qnaService.postQna(writer.getId(), title, content);
+                qnaService.postQna(writer.getId(), title, content, false);
 
         //then
         assertThat(response.getTitle()).isEqualTo(title);
@@ -57,7 +57,7 @@ class QnaServiceTest {
         String title = "마카오 맛집 알려주세요";
         String content = "마카오 여행 처음인데 맛집 알려주세요!";
         QnaResponseDto response =
-                qnaService.postQna(writer.getId(), title, content);
+                qnaService.postQna(writer.getId(), title, content, false);
 
         //when
         qnaService.deleteQnaArticle(writer.getId(), response.getId());
@@ -75,7 +75,7 @@ class QnaServiceTest {
         String title = "마카오 맛집 알려주세요";
         String content = "마카오 여행 처음인데 맛집 알려주세요!";
         QnaResponseDto response =
-                qnaService.postQna(writer.getId(), title, content);
+                qnaService.postQna(writer.getId(), title, content, false);
 
         //when
         Long otherWriterId = -1L;
@@ -97,7 +97,7 @@ class QnaServiceTest {
         String title = "마카오 맛집 알려주세요";
         String content = "마카오 여행 처음인데 맛집 알려주세요!";
         QnaResponseDto articleResponse =
-                qnaService.postQna(writer.getId(), title, content);
+                qnaService.postQna(writer.getId(), title, content, false);
 
         //when
         String newTitle = "마카오 맛집 알려주세요 (수정)";
@@ -125,7 +125,7 @@ class QnaServiceTest {
         String title = "마카오 맛집 알려주세요";
         String content = "마카오 여행 처음인데 맛집 알려주세요!";
         QnaResponseDto articleResponse =
-                qnaService.postQna(writer.getId(), title, content);
+                qnaService.postQna(writer.getId(), title, content, false);
 
         //when
         QnaResponseDto response = qnaService.oneQna(writer.getId(), articleResponse.getId());
