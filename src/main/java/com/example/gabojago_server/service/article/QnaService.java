@@ -1,7 +1,7 @@
 package com.example.gabojago_server.service.article;
 
 import com.example.gabojago_server.dto.response.article.QnaResponseDto;
-import com.example.gabojago_server.repository.article.ArticleRepository;
+import com.example.gabojago_server.repository.article.Qna.QnaArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class QnaService {
-    private final ArticleRepository articleRepository;
+    private final QnaArticleRepository qnaArticleRepository;
     private final MemberRepository memberRepository;
 
     public QnaResponseDto oneQna(Long writerId, Long articleId) {
