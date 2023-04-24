@@ -22,7 +22,7 @@ public class QnaResponseDto {
 
     private int review;
 
-    private boolean isSelected;
+    private boolean selected;
 
     private boolean isWritten;
 
@@ -33,7 +33,7 @@ public class QnaResponseDto {
                 .title(article.getTitle())
                 .content(article.getContent())
                 .review(article.getReview())
-                .isSelected(article.isSelected())
+                .selected(article.selected())
                 .isWritten(isWritten)
                 .build();
     }
