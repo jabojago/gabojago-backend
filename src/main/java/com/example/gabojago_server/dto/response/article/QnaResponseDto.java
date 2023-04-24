@@ -1,5 +1,6 @@
 package com.example.gabojago_server.dto.response.article;
 
+import com.example.gabojago_server.model.article.QnaArticle;
 import com.example.gabojago_server.model.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,15 @@ public class QnaResponseDto {
 
     private boolean isWritten;
 
-
+    public static QnaResponseDto of(QnaArticle article, boolean isWritten) {
+        return QnaResponseDto.builder()
+                .id(article.getId())
+                .writer(article.getWriter())
+                .title(article.getTitle())
+                .content(article.getContent())
+                .review(article.getReview())
+                .isSelected(article.isSelected())
+                .isWritten(isWritten)
+                .build();
+    }
 }
