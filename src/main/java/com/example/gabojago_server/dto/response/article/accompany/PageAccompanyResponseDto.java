@@ -1,19 +1,15 @@
-package com.example.gabojago_server.dto.response.article;
+package com.example.gabojago_server.dto.response.article.accompany;
 
 import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.example.gabojago_server.model.member.Member;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.format.DateTimeFormatter;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class AccompanyResponseDto {
+public class PageAccompanyResponseDto {
     private Long id;
 
     private Member writer;
@@ -32,10 +28,8 @@ public class AccompanyResponseDto {
 
     private int recruitMember;
 
-    private boolean isWritten;
-
-    public static AccompanyResponseDto of(AccompanyArticle article, boolean isWritten) {
-        return AccompanyResponseDto.builder()
+    public static PageAccompanyResponseDto of(AccompanyArticle article) {
+        return PageAccompanyResponseDto.builder()
                 .id(article.getId())
                 .writer(article.getWriter())
                 .title(article.getTitle())
@@ -45,8 +39,6 @@ public class AccompanyResponseDto {
                 .startDate(article.getStartDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .endDate(article.getEndDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .recruitMember(article.getRecruitNumber())
-                .isWritten(isWritten)
                 .build();
-
     }
 }

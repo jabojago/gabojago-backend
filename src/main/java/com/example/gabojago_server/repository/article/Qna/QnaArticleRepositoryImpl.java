@@ -1,7 +1,7 @@
-package com.example.gabojago_server.repository.article;
+package com.example.gabojago_server.repository.article.Qna;
 
-import com.example.gabojago_server.dto.response.article.PageAccompanyResponseDto;
-import com.example.gabojago_server.model.article.AccompanyArticle;
+import com.example.gabojago_server.dto.response.article.qna.PageQnaResponseDto;
+import com.example.gabojago_server.model.article.QnaArticle;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -12,29 +12,29 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.gabojago_server.model.article.QAccompanyArticle.accompanyArticle;
+import static com.example.gabojago_server.model.article.QQnaArticle.qnaArticle;
 
 @Repository
 @RequiredArgsConstructor
-public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
+public class QnaArticleRepositoryImpl implements QnaArticleRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<PageAccompanyResponseDto> searchAll(Pageable pageable) {
-        List<AccompanyArticle> articles = jpaQueryFactory
-                .selectFrom(accompanyArticle)
-                .orderBy(accompanyArticle.id.desc())
+    public Page<PageQnaResponseDto> searchAll(Pageable pageable) {
+        List<QnaArticle> articles = jpaQueryFactory
+                .selectFrom(qnaArticle)
+                .orderBy(qnaArticle.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        List<PageAccompanyResponseDto> pages = articles
+        List<PageQnaResponseDto> pages = articles
                 .stream()
-                .map(PageAccompanyResponseDto::of)
+                .map(PageQnaResponseDto::of)
                 .collect(Collectors.toList());
 
         int totalSize = jpaQueryFactory
-                .selectFrom(accompanyArticle)
+                .selectFrom(qnaArticle)
                 .fetch()
                 .size();
 

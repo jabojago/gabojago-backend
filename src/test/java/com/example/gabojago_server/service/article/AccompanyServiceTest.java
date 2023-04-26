@@ -1,10 +1,10 @@
 package com.example.gabojago_server.service.article;
 
 import com.example.gabojago_server.config.JpaConfig;
-import com.example.gabojago_server.dto.response.article.AccompanyResponseDto;
+import com.example.gabojago_server.dto.response.article.accompany.AccompanyResponseDto;
 import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.example.gabojago_server.model.member.Member;
-import com.example.gabojago_server.repository.article.ArticleRepository;
+import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class AccompanyServiceTest {
     private AccompanyService accompanyService;
 
     @Autowired
-    private ArticleRepository articleRepository;
+    private AccompanyArticleRepository articleRepository;
 
     @Autowired
     private MemberRepository memberRepository;
