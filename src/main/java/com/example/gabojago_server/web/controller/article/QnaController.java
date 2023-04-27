@@ -1,6 +1,5 @@
 package com.example.gabojago_server.web.controller.article;
 
-import com.example.gabojago_server.config.SecurityUtil;
 import com.example.gabojago_server.dto.request.article.QnaRequestDto;
 import com.example.gabojago_server.dto.response.article.qna.PageQnaResponseDto;
 import com.example.gabojago_server.dto.response.article.qna.QnaResponseDto;
@@ -13,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
+
+import static com.example.gabojago_server.config.SecurityUtil.getCurrentMemberIdx;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,26 +28,23 @@ public class QnaController {
 
     @GetMapping("/posts/{articleId}")
     public ResponseEntity<QnaResponseDto> getOneQna(@PathVariable(value = "articleId") Long articleId) {
-        return ResponseEntity.ok(qnaService.oneQna(findMemberId(), articleId));
+        return ResponseEntity.ok(qnaService.oneQna(getCurrentMemberIdx(), articleId));
     }
 
     @PostMapping("/post")
     public ResponseEntity<QnaResponseDto> createQnaArticle(@RequestBody QnaRequestDto requestDto) {
-        return ResponseEntity.ok(qnaService.postQna(findMemberId(), requestDto.getTitle(), requestDto.getContent(), requestDto.isSelected()));
+        return ResponseEntity.ok(qnaService.postQna(getCurrentMemberIdx(), requestDto.getTitle(), requestDto.getContent(), requestDto.isSelected()));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<QnaResponseDto> changeQnaArticle(@PathVariable(value = "id") Long articleId, @RequestBody QnaRequestDto requestDto) {
-        return ResponseEntity.ok(qnaService.changeQnaArticle(findMemberId(), articleId, requestDto.getTitle(), requestDto.getContent(), requestDto.isSelected()));
+        return ResponseEntity.ok(qnaService.changeQnaArticle(getCurrentMemberIdx(), articleId, requestDto.getTitle(), requestDto.getContent(), requestDto.isSelected()));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteQnaArticle(@PathVariable(value = "id") Long articleId) {
-        qnaService.deleteQnaArticle(findMemberId(), articleId);
+        qnaService.deleteQnaArticle(getCurrentMemberIdx(), articleId);
         return ResponseEntity.ok(new String("Success".getBytes(StandardCharsets.UTF_8)));
     }
 
-    private Long findMemberId() {
-        return SecurityUtil.getCurrentMemberIdx();
-    }
 }
