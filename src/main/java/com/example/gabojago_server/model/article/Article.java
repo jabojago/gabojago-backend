@@ -3,8 +3,8 @@ package com.example.gabojago_server.model.article;
 import com.example.gabojago_server.model.articlecomment.ArticleComment;
 import com.example.gabojago_server.model.common.BaseTimeEntity;
 import com.example.gabojago_server.model.member.Member;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +16,8 @@ import java.util.Objects;
 @Inheritance(strategy = InheritanceType.JOINED)
 @ToString(exclude = "writer")
 @Table(name = "articles")
-public abstract class Article extends BaseTimeEntity {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Article extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +38,18 @@ public abstract class Article extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     protected List<ArticleComment> commentList = new ArrayList<>();
+
+    @Builder
+    public Article(Member writer, String title, String content) {
+        this.writer = writer;
+        this.title = title;
+        this.content = content;
+    }
+
+    public void edit(String title, String content) {
+        if (StringUtils.hasText(title)) this.title = title;
+        if (StringUtils.hasText(content)) this.content = content;
+    }
 
     public void reviewCountUp() {
         this.review++;
