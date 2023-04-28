@@ -1,0 +1,22 @@
+= Gabojago
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+= 회원가입
+
+=== 요청
+
+include::{snippets}/member/auth/signup/http-request.adoc[]
+include::{snippets}/member/auth/signup/request-fields.adoc[]
+include::{snippets}/member/auth/signup/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/auth/signup/http-response.adoc[]
+include::{snippets}/member/auth/signup/response-fields.adoc[]
+include::{snippets}/member/auth/signup/response-body.adoc[]
+

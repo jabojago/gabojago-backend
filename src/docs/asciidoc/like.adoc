@@ -1,0 +1,34 @@
+= Gabojago
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+= 게시글에 좋아요 기능
+
+=== 요청
+
+include::{snippets}/like/like/http-request.adoc[]
+include::{snippets}/like/like/path-parameters.adoc[]
+
+
+== 응답
+include::{snippets}/like/like/http-response.adoc[]
+include::{snippets}/like/like/response-fields.adoc[]
+
+
+
+= 게시글 좋아요 조회
+
+=== 요청
+
+include::{snippets}/like/getLikeNumber/http-request.adoc[]
+include::{snippets}/like/getLikeNumber/path-parameters.adoc[]
+
+
+== 응답
+include::{snippets}/like/getLikeNumber/http-response.adoc[]
+include::{snippets}/like/getLikeNumber/response-fields.adoc[]
+

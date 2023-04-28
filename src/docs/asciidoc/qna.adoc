@@ -1,0 +1,68 @@
+= Gabojago
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+= QnA 게시글 목록 조회
+
+=== 요청
+
+include::{snippets}/article/qna/all/http-request.adoc[]
+include::{snippets}/article/qna/all/request-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/article/qna/all/http-response.adoc[]
+include::{snippets}/article/qna/all/response-fields.adoc[]
+
+= QnA 게시글 단일 조회
+
+=== 요청
+
+include::{snippets}/article/qna/one/http-request.adoc[]
+include::{snippets}/article/qna/one/path-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/article/qna/one/http-response.adoc[]
+include::{snippets}/article/qna/one/response-fields.adoc[]
+
+= QnA 게시글 등록
+
+=== 요청
+
+include::{snippets}/article/qna/create/http-request.adoc[]
+include::{snippets}/article/qna/create/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/article/qna/create/http-response.adoc[]
+include::{snippets}/article/qna/create/response-fields.adoc[]
+
+= QnA 게시글 수정
+
+=== 요청
+
+include::{snippets}/article/qna/change/http-request.adoc[]
+include::{snippets}/article/qna/change/path-parameters.adoc[]
+include::{snippets}/article/qna/change/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/article/qna/change/http-response.adoc[]
+include::{snippets}/article/qna/change/response-fields.adoc[]
+
+= QnA 게시글 삭제
+
+=== 요청
+
+include::{snippets}/article/qna/delete/http-request.adoc[]
+include::{snippets}/article/qna/delete/path-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/article/qna/delete/http-response.adoc[]
+include::{snippets}/article/qna/delete/response-body.adoc[]
