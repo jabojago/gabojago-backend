@@ -3,6 +3,7 @@ package com.example.gabojago_server.web.controller.article;
 
 import com.example.gabojago_server.dto.request.article.AccompanyRequestDto;
 import com.example.gabojago_server.dto.request.article.ArticleRequestDto;
+import com.example.gabojago_server.dto.response.NormalResponse;
 import com.example.gabojago_server.dto.response.article.ArticleResponseDto;
 import com.example.gabojago_server.service.article.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.charset.StandardCharsets;
 
 import static com.example.gabojago_server.config.SecurityUtil.getCurrentMemberIdx;
 
@@ -45,9 +44,9 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteAccompanyArticle(@PathVariable(value = "id") Long articleId) {
+    public ResponseEntity<NormalResponse> deleteAccompanyArticle(@PathVariable(value = "id") Long articleId) {
         articleService.deleteArticle(getCurrentMemberIdx(), articleId);
-        return ResponseEntity.ok(new String("Success".getBytes(), StandardCharsets.UTF_8));
+        return ResponseEntity.ok(NormalResponse.success());
     }
 
 
