@@ -13,8 +13,8 @@ public class SecurityUtil {
         //JwtAuthenticationFilter에서 저장한 유저 정보 꺼내기
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || authentication.getName() == null) {
-            return 0L;
+        if (authentication == null || authentication.getName() == null || authentication.getName().equals("anonymousUser")) {
+            return 0L; // 인증 받지 못한 사용자인 경우 ID 0 을 리턴
         }
 
         //userIdx return

@@ -49,6 +49,8 @@ public class WebSecurityConfig {
                 .antMatchers("/api/accompany/**").permitAll()
                 .antMatchers("/api/qna/**").permitAll()
                 .antMatchers("/api/articles/**").permitAll()
+                .antMatchers("/api/comment/**").permitAll()
+                .antMatchers("/api/like/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
