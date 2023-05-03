@@ -28,23 +28,23 @@ public class ArticleController {
     }
 
     @GetMapping("/posts/{articleId}")
-    public ResponseEntity<ArticleResponseDto> getOneAccompany(@PathVariable(value = "articleId") Long articleId) {
+    public ResponseEntity<ArticleResponseDto> getCommunityArticle(@PathVariable(value = "articleId") Long articleId) {
         return ResponseEntity.ok(articleService.oneArticle(getCurrentMemberIdx(), articleId));
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ArticleResponseDto> createAccompanyArticle(@RequestBody ArticleRequestDto requestDto) {
+    public ResponseEntity<ArticleResponseDto> createCommunityArticle(@RequestBody ArticleRequestDto requestDto) {
         return ResponseEntity.ok(articleService.postArticle(getCurrentMemberIdx(), requestDto.getTitle(), requestDto.getContent()));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ArticleResponseDto> changeAccompanyArticle(@PathVariable(value = "id") Long articleId, @RequestBody AccompanyRequestDto requestDto) {
+    public ResponseEntity<ArticleResponseDto> changeCommunityArticle(@PathVariable(value = "id") Long articleId, @RequestBody AccompanyRequestDto requestDto) {
         return ResponseEntity.ok(articleService.changeArticle(getCurrentMemberIdx(),
                 articleId, requestDto.getTitle(), requestDto.getContent()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<NormalResponse> deleteAccompanyArticle(@PathVariable(value = "id") Long articleId) {
+    public ResponseEntity<NormalResponse> deleteCommunityArticle(@PathVariable(value = "id") Long articleId) {
         articleService.deleteArticle(getCurrentMemberIdx(), articleId);
         return ResponseEntity.ok(NormalResponse.success());
     }
