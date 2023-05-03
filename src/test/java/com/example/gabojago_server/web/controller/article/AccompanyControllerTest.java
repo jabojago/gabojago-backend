@@ -50,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs(uriHost = "gabojago.shop", uriPort = 80)
 @ExtendWith(RestDocumentationExtension.class)
 @Import(TestSecurityConfig.class)
-class ArticleControllerTest {
+class AccompanyControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
