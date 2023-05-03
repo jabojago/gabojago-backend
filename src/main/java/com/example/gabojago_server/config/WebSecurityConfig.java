@@ -51,7 +51,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/articles/**").permitAll()
                 .antMatchers("/api/comment/**").permitAll()
                 .antMatchers("/api/like/**").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/docs/**").permitAll()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
 
@@ -64,12 +64,9 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
         configuration.addAllowedOrigin("*");
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-        configuration.setAllowCredentials(true);
-
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
