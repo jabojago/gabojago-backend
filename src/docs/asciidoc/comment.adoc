@@ -1,0 +1,60 @@
+= Gabojago
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+= 게시글 모든 댓글 조회
+
+=== 요청
+
+include::{snippets}/comment/all/http-request.adoc[]
+include::{snippets}/comment/all/path-parameters.adoc[]
+
+
+=== 응답
+include::{snippets}/comment/all/http-response.adoc[]
+include::{snippets}/comment/all/response-fields.adoc[]
+
+
+
+= 게시글 댓글 등록
+
+=== 요청
+
+include::{snippets}/comment/create/http-request.adoc[]
+include::{snippets}/comment/create/path-parameters.adoc[]
+include::{snippets}/comment/create/request-fields.adoc[]
+
+
+=== 응답
+include::{snippets}/comment/create/http-response.adoc[]
+include::{snippets}/comment/create/response-fields.adoc[]
+
+
+= 게시글 댓글 수정
+
+=== 요청
+
+include::{snippets}/comment/change/http-request.adoc[]
+include::{snippets}/comment/change/path-parameters.adoc[]
+include::{snippets}/comment/change/request-fields.adoc[]
+
+
+=== 응답
+include::{snippets}/comment/change/http-response.adoc[]
+include::{snippets}/comment/change/response-fields.adoc[]
+
+= 게시글 댓글 삭제
+
+=== 요청
+
+include::{snippets}/comment/delete/http-request.adoc[]
+include::{snippets}/comment/delete/path-parameters.adoc[]
+
+
+=== 응답
+include::{snippets}/comment/delete/http-response.adoc[]
+include::{snippets}/comment/delete/response-fields.adoc[]

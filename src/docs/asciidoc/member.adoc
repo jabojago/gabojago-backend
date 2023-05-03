@@ -1,0 +1,76 @@
+= Gabojago
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+= 회원가입
+
+=== 요청
+
+include::{snippets}/member/auth/signup/http-request.adoc[]
+include::{snippets}/member/auth/signup/request-fields.adoc[]
+include::{snippets}/member/auth/signup/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/auth/signup/http-response.adoc[]
+include::{snippets}/member/auth/signup/response-fields.adoc[]
+include::{snippets}/member/auth/signup/response-body.adoc[]
+
+= 회원 정보 조회
+
+=== 요청
+
+include::{snippets}/member/info/memberInfo/http-request.adoc[]
+include::{snippets}/member/info/memberInfo/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/info/memberInfo/http-response.adoc[]
+include::{snippets}/member/info/memberInfo/response-fields.adoc[]
+include::{snippets}/member/info/memberInfo/response-body.adoc[]
+
+= 회원 닉네임 수정
+
+=== 요청
+
+include::{snippets}/member/info/nickname/http-request.adoc[]
+include::{snippets}/member/info/nickname/request-fields.adoc[]
+include::{snippets}/member/info/nickname/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/info/nickname/http-response.adoc[]
+include::{snippets}/member/info/nickname/response-fields.adoc[]
+include::{snippets}/member/info/nickname/response-body.adoc[]
+
+= 회원 비밀번호 수정
+
+=== 요청
+
+include::{snippets}/member/info/password/http-request.adoc[]
+include::{snippets}/member/info/password/request-fields.adoc[]
+include::{snippets}/member/info/password/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/info/password/http-response.adoc[]
+include::{snippets}/member/info/password/response-fields.adoc[]
+include::{snippets}/member/info/password/response-body.adoc[]
+
+= 회원 전화번호 수정
+
+=== 요청
+
+include::{snippets}/member/info/phone/http-request.adoc[]
+include::{snippets}/member/info/phone/request-fields.adoc[]
+include::{snippets}/member/info/phone/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/info/phone/http-response.adoc[]
+include::{snippets}/member/info/phone/response-fields.adoc[]
+include::{snippets}/member/info/phone/response-body.adoc[]

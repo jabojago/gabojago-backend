@@ -1,7 +1,6 @@
 package com.example.gabojago_server.dto.response.article.qna;
 
 import com.example.gabojago_server.model.article.QnaArticle;
-import com.example.gabojago_server.model.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +9,7 @@ import lombok.Getter;
 public class PageQnaResponseDto {
     private Long id;
 
-    private Member writer;
+    private String nickname;
 
     private String title;
 
@@ -23,7 +22,7 @@ public class PageQnaResponseDto {
     public static PageQnaResponseDto of(QnaArticle article) {
         return PageQnaResponseDto.builder()
                 .id(article.getId())
-                .writer(article.getWriter())
+                .nickname(article.getWriter().getNickname())
                 .title(article.getTitle())
                 .content(article.getContent())
                 .review(article.getReview())

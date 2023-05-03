@@ -1,7 +1,6 @@
 package com.example.gabojago_server.dto.response.article.accompany;
 
 import com.example.gabojago_server.model.article.AccompanyArticle;
-import com.example.gabojago_server.model.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 public class AccompanyResponseDto {
     private Long id;
 
-    private Member writer;
+    private String nickname;
 
     private String title;
 
@@ -37,7 +36,7 @@ public class AccompanyResponseDto {
     public static AccompanyResponseDto of(AccompanyArticle article, boolean isWritten) {
         return AccompanyResponseDto.builder()
                 .id(article.getId())
-                .writer(article.getWriter())
+                .nickname(article.getWriter().getNickname())
                 .title(article.getTitle())
                 .content(article.getContent())
                 .review(article.getReview())

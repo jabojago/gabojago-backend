@@ -1,6 +1,7 @@
 package com.example.gabojago_server.web.controller.article;
 
 import com.example.gabojago_server.dto.request.article.QnaRequestDto;
+import com.example.gabojago_server.dto.response.NormalResponse;
 import com.example.gabojago_server.dto.response.article.qna.PageQnaResponseDto;
 import com.example.gabojago_server.dto.response.article.qna.QnaResponseDto;
 import com.example.gabojago_server.service.article.QnaService;
@@ -10,8 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.charset.StandardCharsets;
 
 import static com.example.gabojago_server.config.SecurityUtil.getCurrentMemberIdx;
 
@@ -42,9 +41,9 @@ public class QnaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteQnaArticle(@PathVariable(value = "id") Long articleId) {
+    public ResponseEntity<NormalResponse> deleteQnaArticle(@PathVariable(value = "id") Long articleId) {
         qnaService.deleteQnaArticle(getCurrentMemberIdx(), articleId);
-        return ResponseEntity.ok(new String("Success".getBytes(StandardCharsets.UTF_8)));
+        return ResponseEntity.ok(NormalResponse.success());
     }
 
 }
