@@ -4,7 +4,7 @@ import com.example.gabojago_server.dto.response.comment.CommentResponseDto;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.articlecomment.ArticleComment;
 import com.example.gabojago_server.model.member.Member;
-import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
+import com.example.gabojago_server.repository.article.article.ArticleRepository;
 import com.example.gabojago_server.repository.articlecomment.ArticleCommentRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentService {
-    private final AccompanyArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final ArticleCommentRepository commentRepository;
 
