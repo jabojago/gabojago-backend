@@ -42,7 +42,7 @@ public class WebSecurityConfig {
                 .csrf().disable()   //rest api이므로 csrf 보안 사용 x
                 .formLogin().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/signup").permitAll()
+                .antMatchers("/auth/signup/**").permitAll()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
@@ -52,6 +52,7 @@ public class WebSecurityConfig {
                 .antMatchers("/api/comment/**").permitAll()
                 .antMatchers("/api/like/**").permitAll()
                 .antMatchers("/docs/**").permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
 
