@@ -122,7 +122,7 @@ public class AuthControllerTest {
     private MemberRequestDto createMemberRequestDto() {
         return MemberRequestDto.builder()
                 .email("test@test.com")
-                .password("test123!@#")
+                .password("test123123!@#")
                 .name("test")
                 .nickname("test")
                 .birth("2021-12-31")

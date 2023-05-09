@@ -2,17 +2,16 @@ package com.example.gabojago_server.web.controller.article;
 
 import com.example.gabojago_server.config.TestSecurityConfig;
 import com.example.gabojago_server.dto.request.article.ArticleRequestDto;
-import com.example.gabojago_server.dto.response.article.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.service.article.ArticleService;
-import com.example.gabojago_server.service.article.QnaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -35,7 +34,6 @@ import java.util.Map;
 import static com.example.gabojago_server.web.controller.restDocs.RestDocsUtils.pageableDocsWithContent;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -62,7 +60,7 @@ class CommunityControllerTest {
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    void setup(){
+    void setup() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
     }
@@ -99,7 +97,7 @@ class CommunityControllerTest {
     public void getOneCommunityTest() throws Exception {
 
         given(articleService.oneArticle(0L, 1L))
-                .willReturn(createArticleResponseDto());
+                .willReturn(createOneArticleResponseDto());
 
         mockMvc.perform(get("/api/articles/posts/{articleId}", 1))
                 .andDo(print())
@@ -114,7 +112,8 @@ class CommunityControllerTest {
                                 fieldWithPath("nickname").description("작성자 닉네임"),
                                 fieldWithPath("title").description("커뮤니티 게시글 제목"),
                                 fieldWithPath("content").description("커뮤니티 게시글 내용"),
-                                fieldWithPath("review").description("커뮤니티 게시글 조회수")
+                                fieldWithPath("review").description("커뮤니티 게시글 조회수"),
+                                fieldWithPath("written").description("커뮤니티 게시글 작성자 여부")
                         )
                 ));
     }
@@ -228,7 +227,8 @@ class CommunityControllerTest {
         return new PageImpl<>(List.of(response, other), pageable, 2);
     }
 
-    private Map<String, String> createPageArticleResponseDtoResponseBody(){
+
+    private Map<String, String> createPageArticleResponseDtoResponseBody() {
         return Map.of(
                 "content[].articleId", "커뮤니티글 ID",
                 "content[].nickname", "작성자 닉네임",
@@ -236,6 +236,17 @@ class CommunityControllerTest {
                 "content[].content", "커뮤니티글 내용",
                 "content[].review", "커뮤니티글 조회수"
         );
+    }
+
+    private OneArticleResponseDto createOneArticleResponseDto() {
+        return OneArticleResponseDto.builder()
+                .articleId(1L)
+                .nickname("테스트 닉네임")
+                .title("테스트 제목")
+                .content("테스트 내용")
+                .review(1)
+                .isWritten(true)
+                .build();
     }
 
     private ArticleResponseDto createArticleResponseDto() {
@@ -248,8 +259,8 @@ class CommunityControllerTest {
                 .build();
     }
 
-    private ArticleRequestDto createArticleRequestDto(){
-        return new ArticleRequestDto("제목" ,"내용");
+    private ArticleRequestDto createArticleRequestDto() {
+        return new ArticleRequestDto("제목", "내용");
     }
 }
 

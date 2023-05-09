@@ -542,28 +542,28 @@ Content-Length: 759
   } ],
   "pageable" : {
     "sort" : {
-      "sorted" : false,
+      "empty" : true,
       "unsorted" : true,
-      "empty" : true
+      "sorted" : false
     },
+    "offset" : 0,
     "pageNumber" : 0,
     "pageSize" : 10,
-    "offset" : 0,
     "paged" : true,
     "unpaged" : false
   },
-  "totalPages" : 1,
   "totalElements" : 2,
+  "totalPages" : 1,
   "last" : true,
-  "numberOfElements" : 2,
-  "first" : true,
+  "size" : 10,
   "number" : 0,
   "sort" : {
-    "sorted" : false,
+    "empty" : true,
     "unsorted" : true,
-    "empty" : true
+    "sorted" : false
   },
-  "size" : 10,
+  "numberOfElements" : 2,
+  "first" : true,
   "empty" : false
 }</code></pre>
 </div>
@@ -678,19 +678,9 @@ Content-Length: 759
 <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 여부</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].title</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티글 제목</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].nickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 닉네임</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].articleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].review</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티글 ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티글 조회수</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].content</code></p></td>
@@ -698,9 +688,19 @@ Content-Length: 759
 <td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티글 내용</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].review</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].articleId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티글 조회수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티글 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티글 제목</p></td>
 </tr>
 </tbody>
 </table>
@@ -746,14 +746,15 @@ Cache-Control: no-cache, no-store, max-age=0, must-revalidate
 Pragma: no-cache
 Expires: 0
 X-Frame-Options: DENY
-Content-Length: 141
+Content-Length: 161
 
 {
   "articleId" : 1,
   "nickname" : "테스트 닉네임",
   "title" : "테스트 제목",
   "content" : "테스트 내용",
-  "review" : 1
+  "review" : 1,
+  "written" : true
 }</code></pre>
 </div>
 </div>
@@ -795,6 +796,11 @@ Content-Length: 141
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>review</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티 게시글 조회수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>written</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">커뮤니티 게시글 작성자 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -1097,7 +1103,7 @@ Content-Length: 26
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-05-03 14:35:19 +0900
+Last updated 2023-05-03 16:35:02 +0900
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
