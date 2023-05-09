@@ -27,8 +27,8 @@ public class OAuth2CustomerService extends DefaultOAuth2UserService {
 
         KakaoMember kakaoMember = new KakaoMember(oAuth2User.getAttributes());
 
-        Member member = memberRepository.findByEmail(kakaoMember.getEmail())
-                .orElse(createAndSave(kakaoMember));
+        if (!memberRepository.existsByEmail(kakaoMember.getEmail())) createAndSave(kakaoMember);
+        Member member = memberRepository.findByEmail(kakaoMember.getEmail()).orElseThrow(IllegalStateException::new);
 
         return new DefaultOAuth2User(oAuth2User.getAuthorities(), Map.of("id", member.getId()), "id");
     }
