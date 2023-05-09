@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AccompanyArticleRepository extends JpaRepository<AccompanyArticle, Long>, AccompanyArticleRepositoryCustom {
 
-    @Query("select count(a) > 0 from Article a where a.writer.id = :writer and  a.id = :article")
+    @Query("select count(a) > 0 from AccompanyArticle a where a.writer.id = :writer and a.id = :article")
     boolean existArticleByWriter(@Param("writer") Long writerId, @Param("article") Long articleId);
 }

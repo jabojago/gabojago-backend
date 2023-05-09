@@ -3,6 +3,7 @@ package com.example.gabojago_server.service.article;
 import com.example.gabojago_server.dto.response.article.accompany.AccompanyResponseDto;
 import com.example.gabojago_server.dto.response.article.accompany.PageAccompanyResponseDto;
 import com.example.gabojago_server.model.article.AccompanyArticle;
+import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class AccompanyService {
     private final AccompanyArticleRepository articleRepository;
@@ -24,13 +25,12 @@ public class AccompanyService {
     public AccompanyResponseDto oneAccompany(Long writerId, Long articleId) {
         AccompanyArticle article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
         article.reviewCountUp();
-        if (isOwner(writerId, articleId)) return AccompanyResponseDto.of(article, false);
-        else return AccompanyResponseDto.of(article, true);
+        if (isOwner(article, writerId)) return AccompanyResponseDto.of(article, true);
+        else return AccompanyResponseDto.of(article, false);
     }
 
-    private boolean isOwner(Long writerId, Long articleId) {
-        if (writerId == null) return false;
-        return articleRepository.existArticleByWriter(writerId, articleId);
+    private boolean isOwner(Article article, Long writerId) {
+        return article.getWriter().getId().equals(writerId);
     }
 
     public Page<PageAccompanyResponseDto> allAccompany(Pageable pageable) {
