@@ -22,8 +22,8 @@ public class QnaService {
     public QnaResponseDto oneQna(Long writerId, Long articleId) {
         QnaArticle article = qnaArticleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
         article.reviewCountUp();
-        if (isOwner(writerId, articleId)) return QnaResponseDto.of(article, false);
-        else return QnaResponseDto.of(article, true);
+        if (isOwner(writerId, articleId)) return QnaResponseDto.of(article, true);
+        else return QnaResponseDto.of(article, false);
     }
 
     private boolean isOwner(Long writerId, Long articleId) {
