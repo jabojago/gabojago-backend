@@ -1,12 +1,13 @@
 package com.example.gabojago_server.web.controller.like;
 
-import com.example.gabojago_server.config.SecurityUtil;
 import com.example.gabojago_server.dto.response.NormalResponse;
 import com.example.gabojago_server.dto.response.like.LikeClickResponse;
 import com.example.gabojago_server.service.like.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import static com.example.gabojago_server.config.SecurityUtil.getCurrentMemberIdx;
 
 @RestController
 @RequestMapping("/api/like")
@@ -16,7 +17,7 @@ public class LikeController {
 
     @PostMapping("/{articleId}")
     public ResponseEntity<NormalResponse> like(@PathVariable Long articleId) {
-        likeService.clickLike(articleId, SecurityUtil.getCurrentMemberIdx());
+        likeService.clickLike(articleId, getCurrentMemberIdx());
         return ResponseEntity.ok(NormalResponse.success());
     }
 
