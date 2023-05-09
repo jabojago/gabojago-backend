@@ -1,6 +1,7 @@
 package com.example.gabojago_server.service.article;
 
-import com.example.gabojago_server.dto.response.article.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.article.ArticleRepository;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class ArticleService {
 
@@ -23,10 +24,19 @@ public class ArticleService {
         return articleRepository.findAll(pageable).map(ArticleResponseDto::from);
     }
 
-    public ArticleResponseDto oneArticle(Long writerId, Long articleId) {
-        return ArticleResponseDto.from(articleRepository
-                .findByWriterAndArticle(writerId, articleId)
-                .orElseThrow(IllegalStateException::new));
+    public OneArticleResponseDto oneArticle(Long memberId, Long articleId) {
+        boolean isWritten = false;
+        Article article = articleRepository.findById(articleId).orElseThrow(IllegalStateException::new);
+        article.reviewCountUp();
+        if (article.getWriter().getId().equals(memberId)) isWritten = true;
+        return OneArticleResponseDto.builder()
+                .articleId(articleId)
+                .content(article.getContent())
+                .review(article.getReview())
+                .isWritten(isWritten)
+                .nickname(article.getWriter().getNickname())
+                .title(article.getTitle())
+                .build();
     }
 
     @Transactional
@@ -44,11 +54,12 @@ public class ArticleService {
     public ArticleResponseDto changeArticle(Long writerId, Long articleId, String title, String content) {
         Article article = findArticle(articleId);
         Member writer = findWriter(writerId);
-        if (!article.getWriter().equals(writer)) throw new IllegalStateException();
+        if (!article.getWriter().equals(writer)) throw new IllegalStateException();// 권한
         article.edit(title, content);
         return ArticleResponseDto.from(article);
     }
 
+    @Transactional
     public void deleteArticle(Long writerId, Long articleId) {
         Article article = findArticle(articleId);
         Member writer = findWriter(writerId);

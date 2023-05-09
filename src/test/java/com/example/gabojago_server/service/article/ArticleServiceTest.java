@@ -1,7 +1,8 @@
 package com.example.gabojago_server.service.article;
 
 import com.example.gabojago_server.config.JpaConfig;
-import com.example.gabojago_server.dto.response.article.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.article.ArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
@@ -88,7 +89,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    public void 커뮤니티_글_단일_조회() throws Exception {
+    public void 커뮤니티_글_단일_조회_작성자() throws Exception {
         // given
         Member writer = memberStep.createDefault();
         String title = "[후기] 일본 갔다온 후기입니다.";
@@ -96,13 +97,34 @@ class ArticleServiceTest {
         ArticleResponseDto response = articleService.postArticle(writer.getId(), title, content);
 
         // when
-        ArticleResponseDto articleResponseDto = articleService.oneArticle(writer.getId(), response.getArticleId());
+        OneArticleResponseDto result = articleService.oneArticle(writer.getId(), response.getArticleId());
 
         // then
-        assertThat(articleResponseDto.getContent()).isEqualTo(content);
-        assertThat(articleResponseDto.getTitle()).isEqualTo(title);
-        assertThat(articleResponseDto.getNickname()).isEqualTo(writer.getNickname());
+        assertThat(result.getContent()).isEqualTo(content);
+        assertThat(result.getTitle()).isEqualTo(title);
+        assertThat(result.getNickname()).isEqualTo(writer.getNickname());
+        assertThat(result.isWritten()).isTrue();
     }
+
+    @Test
+    public void 커뮤니티_글_단일_조회_작성자아닌_경우() throws Exception {
+        // given
+        Long memberId = 3L;
+        Member writer = memberStep.createDefault();
+        String title = "[후기] 일본 갔다온 후기입니다.";
+        String content = "재미있었습니다.";
+        ArticleResponseDto response = articleService.postArticle(writer.getId(), title, content);
+
+        // when
+        OneArticleResponseDto result = articleService.oneArticle(memberId, response.getArticleId());
+
+        // then
+        assertThat(result.getContent()).isEqualTo(content);
+        assertThat(result.getTitle()).isEqualTo(title);
+        assertThat(result.getNickname()).isEqualTo(writer.getNickname());
+        assertThat(result.isWritten()).isFalse();
+    }
+
 
     @Test
     public void 커뮤니티_글_여러_조회() throws Exception {

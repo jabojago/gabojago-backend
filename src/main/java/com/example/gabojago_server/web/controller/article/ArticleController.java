@@ -1,10 +1,10 @@
 package com.example.gabojago_server.web.controller.article;
 
 
-import com.example.gabojago_server.dto.request.article.AccompanyRequestDto;
 import com.example.gabojago_server.dto.request.article.ArticleRequestDto;
 import com.example.gabojago_server.dto.response.NormalResponse;
-import com.example.gabojago_server.dto.response.article.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
 import com.example.gabojago_server.service.article.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +28,7 @@ public class ArticleController {
     }
 
     @GetMapping("/posts/{articleId}")
-    public ResponseEntity<ArticleResponseDto> getCommunityArticle(@PathVariable(value = "articleId") Long articleId) {
+    public ResponseEntity<OneArticleResponseDto> getCommunityArticle(@PathVariable(value = "articleId") Long articleId) {
         return ResponseEntity.ok(articleService.oneArticle(getCurrentMemberIdx(), articleId));
     }
 
@@ -38,7 +38,7 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ArticleResponseDto> changeCommunityArticle(@PathVariable(value = "id") Long articleId, @RequestBody AccompanyRequestDto requestDto) {
+    public ResponseEntity<ArticleResponseDto> changeCommunityArticle(@PathVariable(value = "id") Long articleId, @RequestBody ArticleRequestDto requestDto) {
         return ResponseEntity.ok(articleService.changeArticle(getCurrentMemberIdx(),
                 articleId, requestDto.getTitle(), requestDto.getContent()));
     }
