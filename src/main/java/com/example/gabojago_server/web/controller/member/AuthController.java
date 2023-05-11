@@ -1,6 +1,7 @@
 package com.example.gabojago_server.web.controller.member;
 
 import com.example.gabojago_server.dto.TokenDto;
+import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.service.member.AuthService;
@@ -22,9 +23,15 @@ public class AuthController {
         return ResponseEntity.ok(authService.joinMember(requestDto));
     }
 
+    @PostMapping("/login")
+    public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok(authService.loginMember(loginRequestDto));
+    }
+
     @GetMapping("/token")
     public ResponseEntity<TokenDto> login(TokenDto tokenDto) {
         return ResponseEntity.ok(tokenDto);
     }
+
 
 }
