@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Table(name = "like_entity")
 @Entity
@@ -33,6 +34,19 @@ public class LikeEntity extends BaseTimeEntity {
     public LikeEntity(Article article, Member member) {
         this.article = article;
         this.member = member;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LikeEntity)) return false;
+        LikeEntity that = (LikeEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
 

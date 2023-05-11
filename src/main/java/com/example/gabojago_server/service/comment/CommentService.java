@@ -1,10 +1,11 @@
 package com.example.gabojago_server.service.comment;
 
+import com.example.gabojago_server.aop.Alarm;
 import com.example.gabojago_server.dto.response.comment.CommentResponseDto;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.articlecomment.ArticleComment;
 import com.example.gabojago_server.model.member.Member;
-import com.example.gabojago_server.repository.article.article.ArticleRepository;
+import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
 import com.example.gabojago_server.repository.articlecomment.ArticleCommentRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class CommentService {
-    private final ArticleRepository articleRepository;
+    private final AccompanyArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final ArticleCommentRepository commentRepository;
 
@@ -68,6 +69,7 @@ public class CommentService {
         }
     }
 
+    @Alarm
     @Transactional
     public CommentResponseDto createComment(Long writerId, Long articleId, String content) {
         Member member = memberRepository.findById(writerId)
@@ -79,8 +81,8 @@ public class CommentService {
                 .article(article)
                 .writer(member)
                 .build();
-
-        return CommentResponseDto.of(commentRepository.save(comment), true);
+        ArticleComment articleComment = commentRepository.save(comment);
+        return CommentResponseDto.of(articleComment, true);
     }
 
     @Transactional
