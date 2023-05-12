@@ -1,5 +1,7 @@
 package com.example.gabojago_server.service.like;
 
+import com.example.gabojago_server.aop.Alarm;
+import com.example.gabojago_server.dto.response.like.LikeResponseDto;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.like.LikeEntity;
 import com.example.gabojago_server.model.member.Member;
@@ -19,16 +21,18 @@ public class LikeService {
     private final MemberRepository memberRepository;
 
 
-    public void clickLike(Long articleId, Long memberId) {
+    @Alarm
+    public LikeResponseDto clickLike(Long articleId, Long memberId) {
         Article article = getArticle(articleId);
         Member member = getMember(memberId);
 
-        if (likeRepository.findByArticleAndMember(article, member).isPresent()) return;
+        if (likeRepository.findByArticleAndMember(article, member).isPresent()) return null;
 
-        likeRepository.save(LikeEntity.builder()
+        LikeEntity likeEntity = likeRepository.save(LikeEntity.builder()
                 .article(article)
                 .member(member)
                 .build());
+        return new LikeResponseDto(likeEntity.getId());
     }
 
     public int getLike(Long articleId) {

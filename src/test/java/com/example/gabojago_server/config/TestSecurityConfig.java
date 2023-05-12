@@ -1,6 +1,5 @@
 package com.example.gabojago_server.config;
 
-import com.example.gabojago_server.security.LoginAuthenticationConfigurer;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,7 +33,6 @@ public class TestSecurityConfig {
                 .antMatchers("/api/like/**").permitAll()
                 .anyRequest().authenticated();
 
-        http.apply(new LoginAuthenticationConfigurer());
         return http.build();
     }
 }

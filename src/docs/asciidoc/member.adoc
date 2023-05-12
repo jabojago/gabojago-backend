@@ -74,3 +74,17 @@ include::{snippets}/member/info/phone/request-body.adoc[]
 include::{snippets}/member/info/phone/http-response.adoc[]
 include::{snippets}/member/info/phone/response-fields.adoc[]
 include::{snippets}/member/info/phone/response-body.adoc[]
+
+= 알람 조회
+
+=== 요청
+
+include::{snippets}/member/info/alarm/http-request.adoc[]
+include::{snippets}/member/info/alarm/request-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/member/info/alarm/http-response.adoc[]
+include::{snippets}/member/info/alarm/response-fields.adoc[]
+include::{snippets}/member/info/alarm/response-body.adoc[]
+

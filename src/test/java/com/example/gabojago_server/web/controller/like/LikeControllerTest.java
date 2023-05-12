@@ -1,6 +1,7 @@
 package com.example.gabojago_server.web.controller.like;
 
 import com.example.gabojago_server.config.TestSecurityConfig;
+import com.example.gabojago_server.dto.response.like.LikeResponseDto;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.service.like.LikeService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
@@ -61,7 +62,7 @@ class LikeControllerTest {
     @WithMockUser(value = "1")
     public void likeTest() throws Exception {
 
-        willDoNothing().given(likeService).clickLike(1L, 1L);
+        given(likeService.clickLike(1L, 1L)).willReturn(mock(LikeResponseDto.class));
 
         mockMvc.perform(post("/api/like/{articleId}", 1)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ${AccessToken}")

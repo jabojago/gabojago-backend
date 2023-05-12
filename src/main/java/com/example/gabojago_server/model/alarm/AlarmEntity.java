@@ -1,6 +1,5 @@
-package com.example.gabojago_server.model.like;
+package com.example.gabojago_server.model.alarm;
 
-import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.common.BaseTimeEntity;
 import com.example.gabojago_server.model.member.Member;
 import lombok.AccessLevel;
@@ -11,36 +10,43 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Table(name = "like_entity")
 @Entity
 @Getter
+@Table(name = "alarm_entity")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LikeEntity extends BaseTimeEntity {
+public class AlarmEntity extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
+    @Column(name = "alarm_id")
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
-    private Article article;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Enumerated(EnumType.STRING)
+    private AlarmType alarmType;
+
+    @Column(nullable = false)
+    private Long targetId;
+
+    @Column(nullable = false)
+    private Long publisherId;
+
     @Builder
-    public LikeEntity(Article article, Member member) {
-        this.article = article;
+    public AlarmEntity(Member member, AlarmType alarmType, Long targetId, Long publisherId) {
         this.member = member;
+        this.alarmType = alarmType;
+        this.targetId = targetId;
+        this.publisherId = publisherId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof LikeEntity)) return false;
-        LikeEntity that = (LikeEntity) o;
+        if (!(o instanceof AlarmEntity)) return false;
+        AlarmEntity that = (AlarmEntity) o;
         return Objects.equals(id, that.id);
     }
 
@@ -49,4 +55,5 @@ public class LikeEntity extends BaseTimeEntity {
         return Objects.hash(id);
     }
 }
+
 

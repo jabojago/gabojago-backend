@@ -1,10 +1,8 @@
 package com.example.gabojago_server.config;
 
 import com.example.gabojago_server.jwt.JwtTokenProvider;
-import com.example.gabojago_server.security.LoginAuthenticationConfigurer;
 import com.example.gabojago_server.security.oauth2.OAuth2CustomerService;
 import com.example.gabojago_server.security.provider.CustomUserDetailsService;
-import com.example.gabojago_server.security.provider.LoginAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +41,7 @@ public class WebSecurityConfig {
                 .formLogin().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/signup/**").permitAll()
-                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/auth/login/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/api/accompany/**").permitAll()
@@ -52,13 +50,10 @@ public class WebSecurityConfig {
                 .antMatchers("/api/comment/**").permitAll()
                 .antMatchers("/api/like/**").permitAll()
                 .antMatchers("/docs/**").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
-
         http.oauth2Login().defaultSuccessUrl("/auth/token").userInfoEndpoint().userService(oAuth2CustomerService);
-        http.authenticationProvider(new LoginAuthenticationProvider(customUserDetailsService, passwordEncoder()));
-        http.apply(new LoginAuthenticationConfigurer());
         return http.build();
     }
 

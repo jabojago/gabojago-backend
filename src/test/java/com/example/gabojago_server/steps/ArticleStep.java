@@ -33,5 +33,11 @@ public class ArticleStep {
         return (AccompanyArticle) articleRepository.save(article);
     }
 
-
+    public static AccompanyArticle createAccompanyArticleDefaults(Member writer) {
+        return AccompanyArticle.createAccompanyArticle(
+                writer, "제목", "내용",
+                1, "서울", now(), now(),
+                2
+        );
+    }
 }

@@ -19,4 +19,22 @@ public class MemberStep {
                 .birth("1997-07-16")
                 .build());
     }
+
+    public Member createDefault(String nickname) {
+        return memberRepository.save(Member.builder()
+                .email(nickname + "@test.com")
+                .name(nickname)
+                .nickname(nickname)
+                .birth("1997-07-16")
+                .build());
+    }
+
+    public static Member createMemberDefaults() {
+        return Member.builder()
+                .email("test@test.com")
+                .name("test")
+                .nickname("test")
+                .birth("1997-07-16")
+                .build();
+    }
 }
