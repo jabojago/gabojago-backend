@@ -35,9 +35,10 @@ public class AuthController {
 
     @PostMapping("/signup/mailConfirm")
     @ResponseBody
-    String mailConfirm(@RequestParam("email") String email) throws Exception {
+    public ResponseEntity<String> mailConfirm(@RequestParam("email") String email) throws Exception {
+        if(authService.findMember(email)) return ResponseEntity.ok(NormalResponse.fail().getStatus());
         String code = signupEmailService.sendSimpleMessage(email);
-        return code;
+        return ResponseEntity.ok(code);
     }
 
     @PostMapping("/login")
