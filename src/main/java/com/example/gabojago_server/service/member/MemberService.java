@@ -33,11 +33,8 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberResponseDto changePassword(String email, String exPassword, String newPassword) {
+    public MemberResponseDto changePassword(String email,  String newPassword) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
-        if (!passwordEncoder.matches(exPassword, member.getPassword())) {
-            throw new RuntimeException("비밀번호가 맞지 않습니다");
-        }
         member.updatePassword(passwordEncoder.encode((newPassword)));
         return MemberResponseDto.of(memberRepository.save(member));
     }

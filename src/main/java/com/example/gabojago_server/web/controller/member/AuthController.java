@@ -3,6 +3,7 @@ package com.example.gabojago_server.web.controller.member;
 import com.example.gabojago_server.dto.TokenDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
+import com.example.gabojago_server.dto.response.NormalResponse;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.service.mail.ChangePwEmailService;
 import com.example.gabojago_server.service.mail.SignupEmailService;
@@ -20,6 +21,8 @@ import javax.validation.Valid;
 public class AuthController {
 
     private final AuthService authService;
+
+    private final MemberService memberService;
 
     private final SignupEmailService signupEmailService;
 
@@ -40,6 +43,17 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authService.loginMember(loginRequestDto));
+    }
+
+    @PostMapping("/login/findPw")
+    @ResponseBody
+    public ResponseEntity<NormalResponse> findPw(@RequestParam("email") String email) throws Exception {
+        if(authService.findMember(email)){
+            String tempPw = pwEmailService.sendSimpleMessage(email);
+            memberService.changePassword(email, tempPw);
+            return ResponseEntity.ok(NormalResponse.success());
+        }
+        return ResponseEntity.ok(NormalResponse.fail());
     }
 
     @GetMapping("/token")
