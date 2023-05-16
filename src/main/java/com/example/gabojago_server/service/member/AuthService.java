@@ -44,4 +44,8 @@ public class AuthService {
         return jwtTokenProvider.createToken(authentication);
     }
 
+    public boolean findMember(String email){
+        return memberRepository.existsByEmail(email);
+    }
+
 }
