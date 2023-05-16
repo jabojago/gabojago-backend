@@ -58,23 +58,40 @@ public class ChangePwEmailService {
         StringBuffer key = new StringBuffer();
         Random random = new Random();
 
-        for(int i = 0; i<8; i++){
+        boolean hasUpperCase = false;
+        boolean hasLowerCase = false;
+        boolean hasNumber = false;
+        boolean hasSpecialChar = false;
+
+        while(key.length()<8 || !(hasLowerCase && hasUpperCase && hasNumber && hasSpecialChar)){
             int idx = random.nextInt(4);
 
             switch (idx){
                 case 0:
-                    key.append((char) ((int) random.nextInt(26) + 97));
+                    if(!hasLowerCase) {
+                        key.append((char) ((int) random.nextInt(26) + 97));
+                        hasLowerCase = true;
+                    }
                     break;
                 case 1:
-                    key.append((char) ((int) random.nextInt(26) + 65));
+                    if(!hasUpperCase) {
+                        key.append((char) ((int) random.nextInt(26) + 65));
+                        hasUpperCase = true;
+                    }
                     break;
                 case 2:
-                    key.append(random.nextInt(10));
+                    if(!hasNumber) {
+                        key.append(random.nextInt(10));
+                        hasNumber = true;
+                    }
                     break;
                 case 3:
-                    int charIdx = random.nextInt(SPECIAL_CHARS.length());
-                    char specialChar = SPECIAL_CHARS.charAt(charIdx);
-                    key.append(specialChar);
+                    if(!hasSpecialChar) {
+                        int charIdx = random.nextInt(SPECIAL_CHARS.length());
+                        char specialChar = SPECIAL_CHARS.charAt(charIdx);
+                        key.append(specialChar);
+                        hasSpecialChar = true;
+                    }
                     break;
             }
         }
