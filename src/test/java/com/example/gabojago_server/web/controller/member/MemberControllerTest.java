@@ -103,7 +103,7 @@ class MemberControllerTest {
     public void changeMemberNicknameTest() throws Exception {
         ChangeNickNameRequestDto request = createChangeNicknameRequestDto();
 
-        given(memberService.changeNickname(request.getEmail(), request.getNickname()))
+        given(memberService.changeNickname(1L, request.getNickname()))
                 .willReturn(createMemberResponseDto());
 
         mockMvc.perform(post("/api/members/nickname")
@@ -134,7 +134,7 @@ class MemberControllerTest {
     public void changeMemberPasswordTest() throws Exception {
         ChangePasswordRequestDto request = createChangePasswordRequestDto();
 
-        given(memberService.changePassword(request.getEmail(), request.getExPassword(), request.getNewPassword()))
+        given(memberService.changePassword(1L, request.getNewPassword()))
                 .willReturn(createMemberResponseDto());
 
         mockMvc.perform(post("/api/members/password")
@@ -150,7 +150,6 @@ class MemberControllerTest {
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         requestFields(
                                 fieldWithPath("email").description("회원 이메일"),
-                                fieldWithPath("exPassword").description("현재 비밀번호"),
                                 fieldWithPath("newPassword").description("새로운 비밀번호")
                         ),
                         responseFields(
@@ -166,7 +165,7 @@ class MemberControllerTest {
     public void changeMemberPhoneTest() throws Exception {
         ChangePhoneRequestDto request = createChangePhoneRequestDto();
 
-        given(memberService.changePhone(request.getEmail(), request.getPhone()))
+        given(memberService.changePhone(1L, request.getPhone()))
                 .willReturn(createMemberResponseDto());
 
         mockMvc.perform(post("/api/members/phone")
@@ -271,19 +270,19 @@ class MemberControllerTest {
 
     private ChangeNickNameRequestDto createChangeNicknameRequestDto() {
         return new ChangeNickNameRequestDto(
-                "test@test.com", "test"
+                "test"
         );
     }
 
     private ChangePasswordRequestDto createChangePasswordRequestDto() {
         return new ChangePasswordRequestDto(
-                "test@test.com", "test123!@#", "test1234!@#"
+                 "test1234!@#"
         );
     }
 
     private ChangePhoneRequestDto createChangePhoneRequestDto() {
         return new ChangePhoneRequestDto(
-                "test@test.com", "010-0000-0000"
+                "010-0000-0000"
         );
     }
 }

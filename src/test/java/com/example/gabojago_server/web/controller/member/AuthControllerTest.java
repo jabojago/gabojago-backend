@@ -5,7 +5,10 @@ import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
+import com.example.gabojago_server.service.mail.ChangePwEmailService;
+import com.example.gabojago_server.service.mail.SignupEmailService;
 import com.example.gabojago_server.service.member.AuthService;
+import com.example.gabojago_server.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
@@ -25,9 +29,13 @@ import java.util.Map;
 
 import static com.example.gabojago_server.web.controller.restDocs.RestDocsUtils.onlyContent;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -44,6 +52,13 @@ public class AuthControllerTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private SignupEmailService emailService;
+
+    @MockBean
+    private ChangePwEmailService pwEmailService;
+
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
     private ObjectMapper objectMapper;
@@ -74,6 +89,58 @@ public class AuthControllerTest {
                         ),
                         responseFields(
                                 onlyContent(createMemberResponseDtoResponseBody())
+                        )
+                ));
+
+    }
+
+    @Test
+    @DisplayName("[POST] [/auth/signup/mailConfirm] 회원가입 시 이메일 인증 테스트")
+    public void mailConfirmTest() throws Exception {
+        String email = "test@test.com";
+        String ePw = emailService.createKey();
+
+        mockMvc.perform(post("/auth/signup/mailConfirm")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(email)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("mailConfirm"))
+                .andDo(document("member/auth/signup/mailConfirm",
+                        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("회원 이메일")
+                        ),
+                        responseFields(
+                                fieldWithPath("data").description("인증코드")
+                        )
+                ));
+
+    }
+
+    @Test
+    @DisplayName("[POST] [/auth/login/findPw] 로그인 시 비밀번호 찾기 테스트")
+    public void findPwTest() throws Exception {
+        String email = "test@test.com";
+        String ePw = pwEmailService.createKey();
+
+        doNothing().when(authService).changeTempPw(email, ePw);
+
+        mockMvc.perform(post("/auth/findPw")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(email)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("findPw"))
+                .andDo(document("member/auth/findPw",
+                        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                        requestFields(
+                                fieldWithPath(email).description("회원 이메일")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태")
                         )
                 ));
 
