@@ -8,7 +8,6 @@ import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.service.mail.ChangePwEmailService;
 import com.example.gabojago_server.service.mail.SignupEmailService;
 import com.example.gabojago_server.service.member.AuthService;
-import com.example.gabojago_server.service.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +21,6 @@ public class AuthController {
 
     private final AuthService authService;
 
-    private final MemberService memberService;
-
     private final SignupEmailService signupEmailService;
 
     private final ChangePwEmailService pwEmailService;
@@ -35,8 +32,8 @@ public class AuthController {
 
     @PostMapping("/signup/mailConfirm")
     @ResponseBody
-    public ResponseEntity<String> mailConfirm(@RequestParam("email") String email) throws Exception {
-        if(authService.findMember(email)) return ResponseEntity.ok(NormalResponse.fail().getStatus());
+    public ResponseEntity<String> mailConfirm(@RequestBody String email) throws Exception {
+        if (authService.findMember(email)) return ResponseEntity.ok(NormalResponse.duplicated().getStatus());
         String code = signupEmailService.sendSimpleMessage(email);
         return ResponseEntity.ok(code);
     }
@@ -46,15 +43,16 @@ public class AuthController {
         return ResponseEntity.ok(authService.loginMember(loginRequestDto));
     }
 
-    @PostMapping("/login/findPw")
+    @PostMapping("/findPw")
     @ResponseBody
-    public ResponseEntity<NormalResponse> findPw(@RequestParam("email") String email) throws Exception {
-        if(authService.findMember(email)){
-            String tempPw = pwEmailService.sendSimpleMessage(email);
-            memberService.changePassword(email, tempPw);
+    public ResponseEntity<NormalResponse> findPw(@RequestBody String email) throws Exception {
+        if (authService.findMember(email)) {
+            String newPassword = pwEmailService.sendSimpleMessage(email);
+            authService.changeTempPw(email, newPassword);
             return ResponseEntity.ok(NormalResponse.success());
+        } else {
+            return ResponseEntity.ok(NormalResponse.fail());
         }
-        return ResponseEntity.ok(NormalResponse.fail());
     }
 
     @GetMapping("/token")
