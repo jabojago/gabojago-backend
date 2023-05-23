@@ -3,7 +3,7 @@ package com.example.gabojago_server.service.mail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
+
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -14,15 +14,14 @@ import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
-@PropertySource("classpath:application.yml")
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ChangePwEmailService {
 
-    private final JavaMailSender javaMailSender;
+    private final JavaMailSender emailsender;
 
-    private final String ePw = createKey(); //인증번호
+    private String ePw = createKey(); //인증번호
 
     @Value("${spring.mail.username}")
     private String id;
@@ -33,7 +32,7 @@ public class ChangePwEmailService {
         log.info("보내는 대상 : " + to);
         log.info("인증 번호 : " + ePw);
 
-        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessage message = emailsender.createMimeMessage();
 
         message.addRecipients(MimeMessage.RecipientType.TO, to);    //수신자
         message.setSubject("가보자Go 임시 비밀번호입니다.");   //메일 제목
@@ -103,7 +102,7 @@ public class ChangePwEmailService {
         MimeMessage message = createMessage(to);
 
         try{
-            javaMailSender.send(message);
+            emailsender.send(message);
         }catch (MailException es){
             es.printStackTrace();
             throw new IllegalAccessException();
