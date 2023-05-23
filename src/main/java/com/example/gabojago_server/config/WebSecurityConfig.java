@@ -41,6 +41,7 @@ public class WebSecurityConfig {
                 .formLogin().disable()
                 .authorizeRequests()
                 .antMatchers("/auth/signup/**").permitAll()
+                .antMatchers("/auth/findPw/**").permitAll()
                 .antMatchers("/auth/login/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
