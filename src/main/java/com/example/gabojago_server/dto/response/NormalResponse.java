@@ -20,4 +20,8 @@ public class NormalResponse {
     public static NormalResponse fail(){
         return new NormalResponse("FAIL");
     }
+
+    public static NormalResponse duplicated(){
+        return new NormalResponse("DUPLICATED DATA");
+    }
 }
