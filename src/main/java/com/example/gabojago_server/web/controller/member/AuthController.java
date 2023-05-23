@@ -1,6 +1,7 @@
 package com.example.gabojago_server.web.controller.member;
 
 import com.example.gabojago_server.dto.TokenDto;
+import com.example.gabojago_server.dto.request.member.EmailRequestDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.NormalResponse;
@@ -32,9 +33,10 @@ public class AuthController {
 
     @PostMapping("/signup/mailConfirm")
     @ResponseBody
-    public ResponseEntity<String> mailConfirm(@RequestBody String email) throws Exception {
-        if (authService.findMember(email)) return ResponseEntity.ok(NormalResponse.duplicated().getStatus());
-        String code = signupEmailService.sendSimpleMessage(email);
+    public ResponseEntity<String> mailConfirm(@RequestBody EmailRequestDto requestDto) throws Exception {
+        if (authService.findMember(requestDto.getEmail()))
+            return ResponseEntity.ok(NormalResponse.duplicated().getStatus());
+        String code = signupEmailService.sendSimpleMessage(requestDto.getEmail());
         return ResponseEntity.ok(code);
     }
 
@@ -45,10 +47,10 @@ public class AuthController {
 
     @PostMapping("/findPw")
     @ResponseBody
-    public ResponseEntity<NormalResponse> findPw(@RequestBody String email) throws Exception {
-        if (authService.findMember(email)) {
-            String newPassword = pwEmailService.sendSimpleMessage(email);
-            authService.changeTempPw(email, newPassword);
+    public ResponseEntity<NormalResponse> findPw(@RequestBody EmailRequestDto requestDto) throws Exception {
+        if (authService.findMember(requestDto.getEmail())) {
+            String newPassword = pwEmailService.sendSimpleMessage(requestDto.getEmail());
+            authService.changeTempPw(requestDto.getEmail(), newPassword);
             return ResponseEntity.ok(NormalResponse.success());
         } else {
             return ResponseEntity.ok(NormalResponse.fail());

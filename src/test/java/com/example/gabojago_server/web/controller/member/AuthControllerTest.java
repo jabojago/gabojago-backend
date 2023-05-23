@@ -1,6 +1,7 @@
 package com.example.gabojago_server.web.controller.member;
 
 import com.example.gabojago_server.config.TestSecurityConfig;
+import com.example.gabojago_server.dto.request.member.EmailRequestDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
@@ -8,7 +9,6 @@ import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.service.mail.ChangePwEmailService;
 import com.example.gabojago_server.service.mail.SignupEmailService;
 import com.example.gabojago_server.service.member.AuthService;
-import com.example.gabojago_server.service.member.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +19,6 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.restdocs.operation.preprocess.Preprocessors;
@@ -29,13 +28,8 @@ import java.util.Map;
 
 import static com.example.gabojago_server.web.controller.restDocs.RestDocsUtils.onlyContent;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -97,16 +91,15 @@ public class AuthControllerTest {
     @Test
     @DisplayName("[POST] [/auth/signup/mailConfirm] 회원가입 시 이메일 인증 테스트")
     public void mailConfirmTest() throws Exception {
-        String email = "test@test.com";
-        String ePw = emailService.createKey();
+        EmailRequestDto requestDto = createEmailRequestDto();
 
         mockMvc.perform(post("/auth/signup/mailConfirm")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(email)))
+                        .content(objectMapper.writeValueAsString(requestDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(handler().methodName("mailConfirm"))
-                .andDo(document("member/auth/signup/mailConfirm",
+                .andDo(document("member/auth/mailConfirm",
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         requestFields(
@@ -120,16 +113,13 @@ public class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("[POST] [/auth/login/findPw] 로그인 시 비밀번호 찾기 테스트")
+    @DisplayName("[POST] [/auth/findPw] 로그인 시 비밀번호 찾기 테스트")
     public void findPwTest() throws Exception {
-        String email = "test@test.com";
-        String ePw = pwEmailService.createKey();
-
-        doNothing().when(authService).changeTempPw(email, ePw);
+        EmailRequestDto requestDto = createEmailRequestDto();
 
         mockMvc.perform(post("/auth/findPw")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(email)))
+                        .content(objectMapper.writeValueAsString(requestDto)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(handler().methodName("findPw"))
@@ -137,7 +127,7 @@ public class AuthControllerTest {
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         requestFields(
-                                fieldWithPath(email).description("회원 이메일")
+                                fieldWithPath("email").description("회원 이메일")
                         ),
                         responseFields(
                                 fieldWithPath("status").description("응답 상태")
@@ -202,6 +192,10 @@ public class AuthControllerTest {
                 .email("test@test.com")
                 .nickname("test")
                 .build();
+    }
+
+    private EmailRequestDto createEmailRequestDto() {
+        return new EmailRequestDto("496300@naver.com");
     }
 
 
