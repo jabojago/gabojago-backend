@@ -36,17 +36,17 @@ public class MemberController {
 
     @PostMapping("/nickname")
     public ResponseEntity<MemberResponseDto> setMemberNickname(@RequestBody @Valid ChangeNickNameRequestDto request) {
-        return ResponseEntity.ok(memberService.changeNickname(request.getEmail(), request.getNickname()));
+        return ResponseEntity.ok(memberService.changeNickname(getCurrentMemberIdx(), request.getNickname()));
     }
 
     @PostMapping("/password")
     public ResponseEntity<MemberResponseDto> setMemberPassword(@RequestBody @Valid ChangePasswordRequestDto request) {
-        return ResponseEntity.ok(memberService.changePassword(request.getEmail(),  request.getNewPassword()));
+        return ResponseEntity.ok(memberService.changePassword(getCurrentMemberIdx(),  request.getNewPassword()));
     }
 
     @PostMapping("/phone")
     public ResponseEntity<MemberResponseDto> setMemberPhone(@RequestBody @Valid ChangePhoneRequestDto request) {
-        return ResponseEntity.ok(memberService.changePhone(request.getEmail(), request.getPhone()));
+        return ResponseEntity.ok(memberService.changePhone(getCurrentMemberIdx(), request.getPhone()));
     }
 
     @GetMapping("/alarms")
