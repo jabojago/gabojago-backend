@@ -118,7 +118,6 @@ class MemberControllerTest {
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         requestFields(
-                                fieldWithPath("email").description("회원 이메일"),
                                 fieldWithPath("nickname").description("회원 닉네임")
                         ),
                         responseFields(
@@ -149,7 +148,6 @@ class MemberControllerTest {
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         requestFields(
-                                fieldWithPath("email").description("회원 이메일"),
                                 fieldWithPath("newPassword").description("새로운 비밀번호")
                         ),
                         responseFields(
@@ -180,7 +178,6 @@ class MemberControllerTest {
                         Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         requestFields(
-                                fieldWithPath("email").description("회원 이메일"),
                                 fieldWithPath("phone").description("새로운 전화번호")
                         ),
                         responseFields(
@@ -276,7 +273,7 @@ class MemberControllerTest {
 
     private ChangePasswordRequestDto createChangePasswordRequestDto() {
         return new ChangePasswordRequestDto(
-                 "test1234!@#"
+                "Test123!"
         );
     }
 
