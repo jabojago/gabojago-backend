@@ -13,6 +13,6 @@ public interface LikeRepository extends JpaRepository<LikeEntity, Long> {
 
     Optional<LikeEntity> findByArticleAndMember(Article article, Member member);
 
-    @Query(" select count(*) from Article a where a = :article ")
-    Integer findByArticle(@Param("article") Article article);
+    @Query(" select count(*) from LikeEntity l where l.article = :article ")
+    Integer countOfArticle(@Param("article") Article article);
 }

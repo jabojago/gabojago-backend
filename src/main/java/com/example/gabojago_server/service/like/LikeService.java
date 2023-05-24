@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class LikeService {
     private final LikeRepository likeRepository;
     private final EntityFinder entityFinder;
@@ -23,9 +23,7 @@ public class LikeService {
     public LikeResponseDto clickLike(Long articleId, Long memberId) {
         Article article = entityFinder.findArticle(articleId);
         Member member = entityFinder.findMember(memberId);
-
         if (likeRepository.findByArticleAndMember(article, member).isPresent()) return null;
-
         LikeEntity likeEntity = likeRepository.save(LikeEntity.builder()
                 .article(article)
                 .member(member)
@@ -35,7 +33,8 @@ public class LikeService {
 
     public int getLike(Long articleId) {
         Article article = entityFinder.findArticle(articleId);
-        return likeRepository.findByArticle(article);
+        return likeRepository.countOfArticle(article);
     }
 
 }
+

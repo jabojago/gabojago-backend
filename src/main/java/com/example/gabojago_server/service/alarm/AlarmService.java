@@ -51,6 +51,7 @@ public class AlarmService {
         Member commentWriter = articleComment.getWriter();
         Article article = articleComment.getArticle();
         Member member = article.getWriter();
+        if (member.equals(commentWriter)) return;
         alarmRepository.save(AlarmEntity.builder()
                 .member(member)
                 .publisherId(commentWriter.getId())
@@ -64,6 +65,7 @@ public class AlarmService {
         Member liker = like.getMember();
         Article article = like.getArticle();
         Member member = article.getWriter();
+        if (member.equals(liker)) return;
         alarmRepository.save(AlarmEntity.builder()
                 .member(member)
                 .publisherId(liker.getId())

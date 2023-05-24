@@ -16,7 +16,7 @@ public enum ErrorCode {
     UNAUTHORIZED_MEMBER(HttpStatus.UNAUTHORIZED, "email 또는 비밀번호가 맞지 않습니다.", "다른 이메일을 사용해야합니다."),
     FORBIDDEN_ARTICLE(HttpStatus.FORBIDDEN, "게시글에 수정, 삭제에 대한 권한이 없습니다.", "잘못된 접근입니다. 입력값을 확인해주세요."),
     FORBIDDEN_COMMENT(HttpStatus.FORBIDDEN, "댓글에 수정, 삭제에 대한 권한이 없습니다.", "잘못된 접근입니다. 입력값을 확인해주세요."),
-    ALREADY_MEMBER(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다.", "다른 이메일을 사용해야합니다."),
+    ALREADY_MEMBER(HttpStatus.CONFLICT, "이미 존재하는 유저 정보입니다.", "다른 이메일 혹은 닉네임을 사용해야합니다."),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료됬거나 권한이 없습니다.", "토큰을 재발급 받아야합니다.")
     // HttpStatus 와 Message 을 입력하고 확장
     ;
