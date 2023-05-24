@@ -83,7 +83,9 @@ class MemberControllerTest {
         given(memberService.getMyInfo())
                 .willReturn(createMemberResponseDto());
 
-        mockMvc.perform(get("/api/members/myInfo"))
+        mockMvc.perform(get("/api/members/myInfo")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer ${AccessToken}")
+                )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(handler().methodName("getMyMemberInfo"))

@@ -17,8 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -29,9 +27,10 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public MemberResponseDto joinMember(MemberRequestDto requestDto) {
-        if (memberRepository.existsByEmail(requestDto.getEmail())) {
+        if (memberRepository.existsByEmail(requestDto.getEmail()))
             throw new GabojagoException(ErrorCode.ALREADY_MEMBER);
-        }
+        if (memberRepository.existsByNickname(requestDto.getNickname()))
+            throw new GabojagoException(ErrorCode.ALREADY_MEMBER);
 
         Member member = requestDto.toMember(passwordEncoder);
         return MemberResponseDto.of(memberRepository.save(member));
@@ -48,11 +47,11 @@ public class AuthService {
         return jwtTokenProvider.createToken(authentication);
     }
 
-    public boolean findMember(String email){
+    public boolean findMember(String email) {
         return memberRepository.existsByEmail(email);
     }
 
-    public void changeTempPw(String email, String newPassword){
+    public void changeTempPw(String email, String newPassword) {
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("가입되지 않은 이메일입니다"));
         member.updatePassword(passwordEncoder.encode((newPassword)));
     }

@@ -31,22 +31,23 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDto changeNickname(Long id, String nickname) {
+        if (memberRepository.existsByNickname(nickname)) throw new GabojagoException(ErrorCode.ALREADY_MEMBER);
         Member member = entityFinder.findMember(id);
         member.updateNickName((nickname));
-        return MemberResponseDto.of(memberRepository.save(member));
+        return MemberResponseDto.of(member);
     }
 
     @Transactional
     public MemberResponseDto changePassword(Long id, String newPassword) {
         Member member = entityFinder.findMember(id);
         member.updatePassword(passwordEncoder.encode((newPassword)));
-        return MemberResponseDto.of(memberRepository.save(member));
+        return MemberResponseDto.of(member);
     }
 
     @Transactional
     public MemberResponseDto changePhone(Long id, String phone) {
         Member member = entityFinder.findMember(id);
         member.updatePhone((phone));
-        return MemberResponseDto.of(memberRepository.save(member));
+        return MemberResponseDto.of(member);
     }
 }
