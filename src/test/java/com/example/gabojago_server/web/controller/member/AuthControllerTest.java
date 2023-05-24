@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +29,7 @@ import java.util.Map;
 
 import static com.example.gabojago_server.web.controller.restDocs.RestDocsUtils.onlyContent;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,6 +94,10 @@ public class AuthControllerTest {
     @DisplayName("[POST] [/auth/signup/mailConfirm] 회원가입 시 이메일 인증 테스트")
     public void mailConfirmTest() throws Exception {
         EmailRequestDto requestDto = createEmailRequestDto();
+        String code = "code";
+
+        given(authService.findMember(requestDto.getEmail())).willReturn(false);
+        given(emailService.sendSimpleMessage(requestDto.getEmail())).willReturn(code);
 
         mockMvc.perform(post("/auth/signup/mailConfirm")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -116,6 +122,11 @@ public class AuthControllerTest {
     @DisplayName("[POST] [/auth/findPw] 로그인 시 비밀번호 찾기 테스트")
     public void findPwTest() throws Exception {
         EmailRequestDto requestDto = createEmailRequestDto();
+        String newPassword = "newPassword";
+
+        given(authService.findMember(requestDto.getEmail())).willReturn(true);
+        given(pwEmailService.sendSimpleMessage(requestDto.getEmail())).willReturn(newPassword);
+        willDoNothing().given(authService).changeTempPw(requestDto.getEmail(),newPassword);
 
         mockMvc.perform(post("/auth/findPw")
                         .contentType(MediaType.APPLICATION_JSON)

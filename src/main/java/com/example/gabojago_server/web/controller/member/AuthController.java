@@ -5,6 +5,7 @@ import com.example.gabojago_server.dto.request.member.EmailRequestDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.NormalResponse;
+import com.example.gabojago_server.dto.response.member.EmailConfirmResponse;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.service.mail.ChangePwEmailService;
 import com.example.gabojago_server.service.mail.SignupEmailService;
@@ -33,11 +34,11 @@ public class AuthController {
 
     @PostMapping("/signup/mailConfirm")
     @ResponseBody
-    public ResponseEntity<String> mailConfirm(@RequestBody EmailRequestDto requestDto) throws Exception {
+    public ResponseEntity<EmailConfirmResponse> mailConfirm(@RequestBody EmailRequestDto requestDto) throws Exception {
         if (authService.findMember(requestDto.getEmail()))
-            return ResponseEntity.ok(NormalResponse.duplicated().getStatus());
+            return ResponseEntity.ok(null); // TODO : 예외 처리
         String code = signupEmailService.sendSimpleMessage(requestDto.getEmail());
-        return ResponseEntity.ok(code);
+        return ResponseEntity.ok(new EmailConfirmResponse(code));
     }
 
     @PostMapping("/login")
