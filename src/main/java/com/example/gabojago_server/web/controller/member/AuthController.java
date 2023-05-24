@@ -1,9 +1,14 @@
 package com.example.gabojago_server.web.controller.member;
 
 import com.example.gabojago_server.dto.TokenDto;
+import com.example.gabojago_server.dto.request.member.EmailRequestDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
+import com.example.gabojago_server.dto.response.NormalResponse;
+import com.example.gabojago_server.dto.response.member.EmailConfirmResponse;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
+import com.example.gabojago_server.service.mail.ChangePwEmailService;
+import com.example.gabojago_server.service.mail.SignupEmailService;
 import com.example.gabojago_server.service.member.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +23,39 @@ public class AuthController {
 
     private final AuthService authService;
 
+    private final SignupEmailService signupEmailService;
+
+    private final ChangePwEmailService pwEmailService;
+
     @PostMapping("/signup")
     public ResponseEntity<MemberResponseDto> signup(@RequestBody @Valid MemberRequestDto requestDto) {
         return ResponseEntity.ok(authService.joinMember(requestDto));
     }
 
+    @PostMapping("/signup/mailConfirm")
+    @ResponseBody
+    public ResponseEntity<EmailConfirmResponse> mailConfirm(@RequestBody EmailRequestDto requestDto) throws Exception {
+        if (authService.findMember(requestDto.getEmail()))
+            return ResponseEntity.ok(null); // TODO : 예외 처리
+        String code = signupEmailService.sendSimpleMessage(requestDto.getEmail());
+        return ResponseEntity.ok(new EmailConfirmResponse(code));
+    }
+
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authService.loginMember(loginRequestDto));
+    }
+
+    @PostMapping("/findPw")
+    @ResponseBody
+    public ResponseEntity<NormalResponse> findPw(@RequestBody EmailRequestDto requestDto) throws Exception {
+        if (authService.findMember(requestDto.getEmail())) {
+            String newPassword = pwEmailService.sendSimpleMessage(requestDto.getEmail());
+            authService.changeTempPw(requestDto.getEmail(), newPassword);
+            return ResponseEntity.ok(NormalResponse.success());
+        } else {
+            return ResponseEntity.ok(NormalResponse.fail());
+        }
     }
 
     @GetMapping("/token")

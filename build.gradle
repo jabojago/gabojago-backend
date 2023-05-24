@@ -42,6 +42,9 @@ dependencies {
     //validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    //mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     //QueryDsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
@@ -118,4 +121,8 @@ bootJar {
         from asciidoctor.outputDir
         into "src/main/resources/static/docs"
     }
+}
+
+compileJava {
+    options.compilerArgs += '-Xlint:unchecked'
 }

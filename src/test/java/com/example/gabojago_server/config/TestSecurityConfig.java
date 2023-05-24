@@ -22,8 +22,9 @@ public class TestSecurityConfig {
                 .csrf().disable()   //rest api이므로 csrf 보안 사용 x
                 .formLogin().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/signup").permitAll()
-                .antMatchers("/auth/login").permitAll()
+                .antMatchers("/auth/signup/**").permitAll()
+                .antMatchers("/auth/login/**").permitAll()
+                .antMatchers("/auth/findPw/**").permitAll()
                 .antMatchers("/login/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/api/accompany/**").permitAll()

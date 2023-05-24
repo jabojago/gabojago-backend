@@ -1,16 +1,20 @@
 package com.example.gabojago_server.web.controller.member;
 
 import com.example.gabojago_server.config.TestSecurityConfig;
+import com.example.gabojago_server.dto.request.member.EmailRequestDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
+import com.example.gabojago_server.service.mail.ChangePwEmailService;
+import com.example.gabojago_server.service.mail.SignupEmailService;
 import com.example.gabojago_server.service.member.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -25,9 +29,9 @@ import java.util.Map;
 
 import static com.example.gabojago_server.web.controller.restDocs.RestDocsUtils.onlyContent;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.handler;
@@ -44,6 +48,13 @@ public class AuthControllerTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private SignupEmailService emailService;
+
+    @MockBean
+    private ChangePwEmailService pwEmailService;
+
     @MockBean
     private JwtTokenProvider jwtTokenProvider;
     private ObjectMapper objectMapper;
@@ -74,6 +85,63 @@ public class AuthControllerTest {
                         ),
                         responseFields(
                                 onlyContent(createMemberResponseDtoResponseBody())
+                        )
+                ));
+
+    }
+
+    @Test
+    @DisplayName("[POST] [/auth/signup/mailConfirm] 회원가입 시 이메일 인증 테스트")
+    public void mailConfirmTest() throws Exception {
+        EmailRequestDto requestDto = createEmailRequestDto();
+        String code = "code";
+
+        given(authService.findMember(requestDto.getEmail())).willReturn(false);
+        given(emailService.sendSimpleMessage(requestDto.getEmail())).willReturn(code);
+
+        mockMvc.perform(post("/auth/signup/mailConfirm")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("mailConfirm"))
+                .andDo(document("member/auth/mailConfirm",
+                        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("회원 이메일")
+                        ),
+                        responseFields(
+                                fieldWithPath("data").description("인증코드")
+                        )
+                ));
+
+    }
+
+    @Test
+    @DisplayName("[POST] [/auth/findPw] 로그인 시 비밀번호 찾기 테스트")
+    public void findPwTest() throws Exception {
+        EmailRequestDto requestDto = createEmailRequestDto();
+        String newPassword = "newPassword";
+
+        given(authService.findMember(requestDto.getEmail())).willReturn(true);
+        given(pwEmailService.sendSimpleMessage(requestDto.getEmail())).willReturn(newPassword);
+        willDoNothing().given(authService).changeTempPw(requestDto.getEmail(),newPassword);
+
+        mockMvc.perform(post("/auth/findPw")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(handler().methodName("findPw"))
+                .andDo(document("member/auth/findPw",
+                        Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+                        Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+                        requestFields(
+                                fieldWithPath("email").description("회원 이메일")
+                        ),
+                        responseFields(
+                                fieldWithPath("status").description("응답 상태")
                         )
                 ));
 
@@ -135,6 +203,10 @@ public class AuthControllerTest {
                 .email("test@test.com")
                 .nickname("test")
                 .build();
+    }
+
+    private EmailRequestDto createEmailRequestDto() {
+        return new EmailRequestDto("496300@naver.com");
     }
 
 
