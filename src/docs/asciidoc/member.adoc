@@ -6,6 +6,19 @@
 :toclevels: 2
 :sectlinks:
 
+= 메일 검증
+
+include::{snippets}/member/auth/mailConfirm/http-request.adoc[]
+include::{snippets}/member/auth/mailConfirm/request-fields.adoc[]
+include::{snippets}/member/auth/mailConfirm/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/auth/mailConfirm/http-response.adoc[]
+include::{snippets}/member/auth/mailConfirm/response-fields.adoc[]
+include::{snippets}/member/auth/mailConfirm/response-body.adoc[]
+
+
 = 회원가입
 
 === 요청
@@ -60,6 +73,22 @@ include::{snippets}/member/info/password/request-body.adoc[]
 include::{snippets}/member/info/password/http-response.adoc[]
 include::{snippets}/member/info/password/response-fields.adoc[]
 include::{snippets}/member/info/password/response-body.adoc[]
+
+
+= 이메일로 회원 비밀번호 변경
+
+=== 요청
+
+include::{snippets}/member/auth/findPw/http-request.adoc[]
+include::{snippets}/member/auth/findPw/request-fields.adoc[]
+include::{snippets}/member/auth/findPw/request-body.adoc[]
+
+=== 응답
+
+include::{snippets}/member/auth/findPw/http-response.adoc[]
+include::{snippets}/member/auth/findPw/response-fields.adoc[]
+include::{snippets}/member/auth/findPw/response-body.adoc[]
+
 
 = 회원 전화번호 수정
 
