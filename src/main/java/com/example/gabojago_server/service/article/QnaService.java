@@ -2,10 +2,12 @@ package com.example.gabojago_server.service.article;
 
 import com.example.gabojago_server.dto.response.article.qna.PageQnaResponseDto;
 import com.example.gabojago_server.dto.response.article.qna.QnaResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.article.QnaArticle;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.Qna.QnaArticleRepository;
-import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,10 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class QnaService {
     private final QnaArticleRepository qnaArticleRepository;
-    private final MemberRepository memberRepository;
+    private final EntityFinder entityFinder;
 
     public QnaResponseDto oneQna(Long writerId, Long articleId) {
-        QnaArticle article = qnaArticleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        QnaArticle article = entityFinder.findQnaArticle(articleId);
         article.reviewCountUp();
         if (isOwner(writerId, articleId)) return QnaResponseDto.of(article, true);
         else return QnaResponseDto.of(article, false);
@@ -39,7 +41,7 @@ public class QnaService {
 
     @Transactional
     public QnaResponseDto postQna(Long writerId, String title, String content, boolean selected) {
-        Member writer = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
+        Member writer = entityFinder.findMember(writerId);
         QnaArticle article = QnaArticle.createQnaArticle(writer, title, content, 0, selected);
         return QnaResponseDto.of(qnaArticleRepository.save(article), true);
     }
@@ -64,11 +66,9 @@ public class QnaService {
     }
 
     private QnaArticle authorizationQnaWriter(Long writerId, Long articleId) {
-        Member member = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
-        QnaArticle article = qnaArticleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
-        if (!article.getWriter().equals(member)) {
-            throw new RuntimeException("로그인한 유저와 작성 유저가 같지 않습니다.");
-        }
+        Member member = entityFinder.findMember(writerId);
+        QnaArticle article = entityFinder.findQnaArticle(articleId);
+        if (!article.getWriter().equals(member)) throw new GabojagoException(ErrorCode.FORBIDDEN_ARTICLE);
         return article;
     }
 }

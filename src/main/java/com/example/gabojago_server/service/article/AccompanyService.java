@@ -2,11 +2,13 @@ package com.example.gabojago_server.service.article;
 
 import com.example.gabojago_server.dto.response.article.accompany.AccompanyResponseDto;
 import com.example.gabojago_server.dto.response.article.accompany.PageAccompanyResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
-import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +22,10 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class AccompanyService {
     private final AccompanyArticleRepository articleRepository;
-    private final MemberRepository memberRepository;
+    private final EntityFinder entityFinder;
 
     public AccompanyResponseDto oneAccompany(Long writerId, Long articleId) {
-        AccompanyArticle article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        AccompanyArticle article = entityFinder.findAccompanyArticle(articleId);
         article.reviewCountUp();
         if (isOwner(article, writerId)) return AccompanyResponseDto.of(article, true);
         else return AccompanyResponseDto.of(article, false);
@@ -43,7 +45,7 @@ public class AccompanyService {
     public AccompanyResponseDto postAccompany(Long writerId, String title, String content,
                                               String region, LocalDate startDate, LocalDate endDate,
                                               int recruitNumber) {
-        Member writer = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
+        Member writer = entityFinder.findMember(writerId);
         AccompanyArticle article = AccompanyArticle.createAccompanyArticle(writer, title, content, 0, region,
                 startDate, endDate, recruitNumber);
         return AccompanyResponseDto.of(articleRepository.save(article), true);
@@ -70,10 +72,10 @@ public class AccompanyService {
     }
 
     private AccompanyArticle authorizationAccompanyWriter(Long writerId, Long articleId) {
-        Member member = memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
-        AccompanyArticle article = (AccompanyArticle) articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        Member member = entityFinder.findMember(writerId);
+        AccompanyArticle article = entityFinder.findAccompanyArticle(articleId);
         if (!article.getWriter().equals(member)) {
-            throw new RuntimeException("로그인한 유저와 작성 유저가 같지 않습니다.");
+            throw new GabojagoException(ErrorCode.FORBIDDEN_ARTICLE);
         }
         return article;
     }

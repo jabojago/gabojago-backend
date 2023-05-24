@@ -2,12 +2,14 @@ package com.example.gabojago_server.service.comment;
 
 import com.example.gabojago_server.aop.Alarm;
 import com.example.gabojago_server.dto.response.comment.CommentResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.articlecomment.ArticleComment;
 import com.example.gabojago_server.model.member.Member;
-import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
 import com.example.gabojago_server.repository.articlecomment.ArticleCommentRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +27,12 @@ import java.util.stream.Stream;
 @Transactional
 @RequiredArgsConstructor
 public class CommentService {
-    private final AccompanyArticleRepository articleRepository;
     private final MemberRepository memberRepository;
     private final ArticleCommentRepository commentRepository;
+    private final EntityFinder entityFinder;
 
     public List<CommentResponseDto> getAllComments(Long articleId) {
-        Article article = articleRepository.findById(articleId).orElseThrow(() -> new RuntimeException("게시글이 없습니다."));
+        Article article = entityFinder.findArticle(articleId);
         List<ArticleComment> comments = commentRepository.findAllByArticle(article);
 
         if (comments.isEmpty())
@@ -72,10 +74,8 @@ public class CommentService {
     @Alarm
     @Transactional
     public CommentResponseDto createComment(Long writerId, Long articleId, String content) {
-        Member member = memberRepository.findById(writerId)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다."));
-        Article article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new RuntimeException("글이 없습니다."));
+        Member member = entityFinder.findMember(writerId);
+        Article article = entityFinder.findArticle(articleId);
         ArticleComment comment = ArticleComment.builder()
                 .content(content)
                 .article(article)
@@ -87,14 +87,11 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto changeComment(Long writerId, Long commentId, String content) {
-        Member member = memberRepository.findById(writerId)
-                .orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
-        ArticleComment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
+        Member member = entityFinder.findMember(writerId);
+        ArticleComment comment = entityFinder.findComment(commentId);
 
-        if (!comment.getWriter().equals(member)) {
-            throw new RuntimeException("댓글 작성자가 아닙니다.");
-        }
+        if (!comment.getWriter().equals(member)) throw new GabojagoException(ErrorCode.FORBIDDEN_COMMENT);
+
         return CommentResponseDto.of(
                 commentRepository.save(ArticleComment.update(comment, content)), true
         );
@@ -102,13 +99,9 @@ public class CommentService {
 
     @Transactional
     public void removeComment(Long writerId, Long commentId) {
-        Member member = memberRepository.findById(writerId)
-                .orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
-        ArticleComment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new RuntimeException("댓글이 없습니다."));
-        if (!comment.getWriter().equals(member)) {
-            throw new RuntimeException("댓글 작성자가 아닙니다.");
-        }
+        Member member = entityFinder.findMember(writerId);
+        ArticleComment comment = entityFinder.findComment(commentId);
+        if (!comment.getWriter().equals(member)) throw new GabojagoException(ErrorCode.FORBIDDEN_COMMENT);
         commentRepository.delete(comment);
     }
 }

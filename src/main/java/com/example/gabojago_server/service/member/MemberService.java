@@ -2,8 +2,11 @@ package com.example.gabojago_server.service.member;
 
 import com.example.gabojago_server.config.SecurityUtil;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,32 +20,34 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EntityFinder entityFinder;
 
     //header의 token 값을 토대로 member의 data 반환
     public MemberResponseDto getMyInfo() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberIdx())
                 .map(MemberResponseDto::of)
-                .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+                .orElseThrow(() -> new GabojagoException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Transactional
     public MemberResponseDto changeNickname(Long id, String nickname) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+        if (memberRepository.existsByNickname(nickname)) throw new GabojagoException(ErrorCode.ALREADY_MEMBER);
+        Member member = entityFinder.findMember(id);
         member.updateNickName((nickname));
-        return MemberResponseDto.of(memberRepository.save(member));
+        return MemberResponseDto.of(member);
     }
 
     @Transactional
-    public MemberResponseDto changePassword(Long id,  String newPassword) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+    public MemberResponseDto changePassword(Long id, String newPassword) {
+        Member member = entityFinder.findMember(id);
         member.updatePassword(passwordEncoder.encode((newPassword)));
-        return MemberResponseDto.of(memberRepository.save(member));
+        return MemberResponseDto.of(member);
     }
 
     @Transactional
     public MemberResponseDto changePhone(Long id, String phone) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
+        Member member = entityFinder.findMember(id);
         member.updatePhone((phone));
-        return MemberResponseDto.of(memberRepository.save(member));
+        return MemberResponseDto.of(member);
     }
 }

@@ -28,10 +28,8 @@ public class MemberController {
 
     @GetMapping("/myInfo")
     public ResponseEntity<MemberResponseDto> getMyMemberInfo() {
-        MemberResponseDto myInfoBySecurity = memberService.getMyInfo();
-        System.out.println(myInfoBySecurity.getNickname());
-        return ResponseEntity.ok((myInfoBySecurity));
-        // return ResponseEntity.ok(memberService.getMyInfoBySecurity());
+        MemberResponseDto response = memberService.getMyInfo();
+        return ResponseEntity.ok((response));
     }
 
     @PostMapping("/nickname")
@@ -41,7 +39,7 @@ public class MemberController {
 
     @PostMapping("/password")
     public ResponseEntity<MemberResponseDto> setMemberPassword(@RequestBody @Valid ChangePasswordRequestDto request) {
-        return ResponseEntity.ok(memberService.changePassword(getCurrentMemberIdx(),  request.getNewPassword()));
+        return ResponseEntity.ok(memberService.changePassword(getCurrentMemberIdx(), request.getNewPassword()));
     }
 
     @PostMapping("/phone")

@@ -7,6 +7,8 @@ import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.NormalResponse;
 import com.example.gabojago_server.dto.response.member.EmailConfirmResponse;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.service.mail.ChangePwEmailService;
 import com.example.gabojago_server.service.mail.SignupEmailService;
 import com.example.gabojago_server.service.member.AuthService;
@@ -35,8 +37,7 @@ public class AuthController {
     @PostMapping("/signup/mailConfirm")
     @ResponseBody
     public ResponseEntity<EmailConfirmResponse> mailConfirm(@RequestBody EmailRequestDto requestDto) throws Exception {
-        if (authService.findMember(requestDto.getEmail()))
-            return ResponseEntity.ok(null); // TODO : 예외 처리
+        if (isAlreadyExistEmail(requestDto.getEmail())) throw new GabojagoException(ErrorCode.ALREADY_MEMBER);
         String code = signupEmailService.sendSimpleMessage(requestDto.getEmail());
         return ResponseEntity.ok(new EmailConfirmResponse(code));
     }
@@ -49,13 +50,10 @@ public class AuthController {
     @PostMapping("/findPw")
     @ResponseBody
     public ResponseEntity<NormalResponse> findPw(@RequestBody EmailRequestDto requestDto) throws Exception {
-        if (authService.findMember(requestDto.getEmail())) {
-            String newPassword = pwEmailService.sendSimpleMessage(requestDto.getEmail());
-            authService.changeTempPw(requestDto.getEmail(), newPassword);
-            return ResponseEntity.ok(NormalResponse.success());
-        } else {
-            return ResponseEntity.ok(NormalResponse.fail());
-        }
+        if (!isAlreadyExistEmail(requestDto.getEmail())) throw new GabojagoException(ErrorCode.MEMBER_NOT_FOUND);
+        String newPassword = pwEmailService.sendSimpleMessage(requestDto.getEmail());
+        authService.changeTempPw(requestDto.getEmail(), newPassword);
+        return ResponseEntity.ok(NormalResponse.success());
     }
 
     @GetMapping("/token")
@@ -63,5 +61,8 @@ public class AuthController {
         return ResponseEntity.ok(tokenDto);
     }
 
+    private boolean isAlreadyExistEmail(String email) {
+        return authService.findMember(email);
+    }
 
 }

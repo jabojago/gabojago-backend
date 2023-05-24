@@ -2,10 +2,12 @@ package com.example.gabojago_server.service.article;
 
 import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
 import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.article.ArticleRepository;
-import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final MemberRepository memberRepository;
+    private final EntityFinder entityFinder;
 
     public Page<ArticleResponseDto> allArticle(Pageable pageable) {
         return articleRepository.findAll(pageable).map(ArticleResponseDto::from);
@@ -26,7 +28,7 @@ public class ArticleService {
 
     public OneArticleResponseDto oneArticle(Long memberId, Long articleId) {
         boolean isWritten = false;
-        Article article = articleRepository.findById(articleId).orElseThrow(IllegalStateException::new);
+        Article article = entityFinder.findArticle(articleId);
         article.reviewCountUp();
         if (article.getWriter().getId().equals(memberId)) isWritten = true;
         return OneArticleResponseDto.builder()
@@ -41,7 +43,7 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponseDto postArticle(Long writerId, String title, String content) {
-        Member writer = findWriter(writerId);
+        Member writer = entityFinder.findMember(writerId);
         Article article = Article.builder()
                 .content(content)
                 .title(title)
@@ -52,27 +54,19 @@ public class ArticleService {
 
     @Transactional
     public ArticleResponseDto changeArticle(Long writerId, Long articleId, String title, String content) {
-        Article article = findArticle(articleId);
-        Member writer = findWriter(writerId);
-        if (!article.getWriter().equals(writer)) throw new IllegalStateException();// 권한
+        Article article = entityFinder.findArticle(articleId);
+        Member writer = entityFinder.findMember(writerId);
+        if (!article.getWriter().equals(writer)) throw new GabojagoException(ErrorCode.FORBIDDEN_ARTICLE);
         article.edit(title, content);
         return ArticleResponseDto.from(article);
     }
 
     @Transactional
     public void deleteArticle(Long writerId, Long articleId) {
-        Article article = findArticle(articleId);
-        Member writer = findWriter(writerId);
-        if (!article.getWriter().equals(writer)) return;
+        Article article = entityFinder.findArticle(articleId);
+        Member writer = entityFinder.findMember(writerId);
+        if (!article.getWriter().equals(writer)) throw new GabojagoException(ErrorCode.FORBIDDEN_ARTICLE);
         articleRepository.delete(article);
-    }
-
-    private Member findWriter(Long writerId) {
-        return memberRepository.findById(writerId).orElseThrow(IllegalStateException::new);
-    }
-
-    private Article findArticle(Long articleId) {
-        return articleRepository.findById(articleId).orElseThrow(IllegalStateException::new);
     }
 
 }

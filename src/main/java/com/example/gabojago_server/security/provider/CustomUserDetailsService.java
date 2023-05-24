@@ -1,5 +1,7 @@
 package com.example.gabojago_server.security.provider;
 
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return memberRepository.findByEmail(email)
                 .map(this::createUserDetails)
-                .orElseThrow(() -> new UsernameNotFoundException(email + " 을 DB에서 찾을 수 없습니다"));
+                .orElseThrow(() -> new GabojagoException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     //DB에 email이 존재하면 UserDetails 객체 만듦

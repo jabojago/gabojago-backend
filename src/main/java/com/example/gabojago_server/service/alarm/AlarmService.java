@@ -9,10 +9,7 @@ import com.example.gabojago_server.model.articlecomment.ArticleComment;
 import com.example.gabojago_server.model.like.LikeEntity;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.alarm.AlarmRepository;
-import com.example.gabojago_server.repository.article.article.ArticleRepository;
-import com.example.gabojago_server.repository.articlecomment.ArticleCommentRepository;
-import com.example.gabojago_server.repository.like.LikeRepository;
-import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -28,25 +25,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class AlarmService {
 
     private final AlarmRepository alarmRepository;
-    private final ArticleCommentRepository articleCommentRepository;
-    private final LikeRepository likeRepository;
-    private final MemberRepository memberRepository;
-    private final ArticleRepository articleRepository;
+    private final EntityFinder entityFinder;
 
     public Page<AlarmResponseDto> findAlarms(Long memberId, Pageable pageable) {
         return alarmRepository.findByMember(memberId, pageable)
                 .map(alarm -> AlarmResponseDto.from(
                         alarm,
-                        getArticle(alarm.getTargetId()),
-                        getMember(alarm.getPublisherId())));
-    }
-
-    public Member getMember(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(IllegalStateException::new);
-    }
-
-    public Article getArticle(Long articleId) {
-        return articleRepository.findById(articleId).orElseThrow(IllegalStateException::new);
+                        entityFinder.findArticle(alarm.getTargetId()),
+                        entityFinder.findMember(alarm.getPublisherId())));
     }
 
     @EventListener(AlarmEvent.class)
@@ -61,10 +47,11 @@ public class AlarmService {
     }
 
     public void makeCommentAlarm(Long commentId) {
-        ArticleComment articleComment = articleCommentRepository.findById(commentId).orElseThrow(IllegalStateException::new);
+        ArticleComment articleComment = entityFinder.findComment(commentId);
         Member commentWriter = articleComment.getWriter();
         Article article = articleComment.getArticle();
         Member member = article.getWriter();
+        if (member.equals(commentWriter)) return;
         alarmRepository.save(AlarmEntity.builder()
                 .member(member)
                 .publisherId(commentWriter.getId())
@@ -74,10 +61,11 @@ public class AlarmService {
     }
 
     public void makeLikeAlarm(Long likeId) {
-        LikeEntity like = likeRepository.findById(likeId).orElseThrow(IllegalStateException::new);
+        LikeEntity like = entityFinder.findLike(likeId);
         Member liker = like.getMember();
         Article article = like.getArticle();
         Member member = article.getWriter();
+        if (member.equals(liker)) return;
         alarmRepository.save(AlarmEntity.builder()
                 .member(member)
                 .publisherId(liker.getId())

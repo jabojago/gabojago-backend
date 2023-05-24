@@ -6,6 +6,7 @@ import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest // Spring Data Jpa 에 필요한 클래스를 모두 Auto 설정 , Repository 게층의 빈을 사용할 수 있다.
-@Import({AccompanyService.class, JpaConfig.class}) // 검증 대상 Import
+@Import({AccompanyService.class, JpaConfig.class, EntityFinder.class}) // 검증 대상 Import
 class AccompanyServiceTest {
 
     @Autowired
