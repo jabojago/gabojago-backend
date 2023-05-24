@@ -2,7 +2,6 @@ package com.example.gabojago_server.config;
 
 import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.security.oauth2.OAuth2CustomerService;
-import com.example.gabojago_server.security.provider.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Component
 public class WebSecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
-    private final CustomUserDetailsService customUserDetailsService;
     private final OAuth2CustomerService oAuth2CustomerService;
 
     //회원 패스워드 암호화해서 저장해야 함

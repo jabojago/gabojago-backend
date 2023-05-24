@@ -1,6 +1,5 @@
 package com.example.gabojago_server.dto.response;
 
-import com.nimbusds.oauth2.sdk.SuccessResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,15 +12,11 @@ public class NormalResponse {
         this.status = status;
     }
 
-    public static NormalResponse success(){
+    public static NormalResponse success() {
         return new NormalResponse("SUCCESS");
     }
 
-    public static NormalResponse fail(){
+    public static NormalResponse fail() {
         return new NormalResponse("FAIL");
-    }
-
-    public static NormalResponse duplicated(){
-        return new NormalResponse("DUPLICATED DATA");
     }
 }

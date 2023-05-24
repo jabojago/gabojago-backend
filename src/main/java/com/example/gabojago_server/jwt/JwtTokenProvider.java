@@ -1,6 +1,8 @@
 package com.example.gabojago_server.jwt;
 
 import com.example.gabojago_server.dto.TokenDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -66,7 +68,7 @@ public class JwtTokenProvider {
         Claims claims = parseClaims(token);
 
         if (claims.get(AUTHORITIES_KEY) == null) {
-            throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+            throw new GabojagoException(ErrorCode.INVALID_TOKEN);
         }
 
         //claims에서 권한 정보 가져오기

@@ -1,5 +1,8 @@
 package com.example.gabojago_server.security.oauth2;
 
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
+
 import java.util.Map;
 
 public class KakaoMember {
@@ -34,7 +37,7 @@ public class KakaoMember {
         try {
             return (Map<String, Object>) getKakaoAccount().get("profile");
         } catch (ClassCastException e) {
-            throw new IllegalStateException("usernameAttribute 정보가 일치하지 않습니다");
+            throw new GabojagoException(ErrorCode.KAKAO_LOGIN, "usernameAttribute 정보가 일치하지 않습니다");
         }
     }
 
@@ -42,7 +45,7 @@ public class KakaoMember {
         try {
             return (Map<String, Object>) attributes.get("kakao_account");
         } catch (ClassCastException e) {
-            throw new IllegalStateException("usernameAttribute 정보가 일치하지 않습니다");
+            throw new GabojagoException(ErrorCode.KAKAO_LOGIN, "usernameAttribute 정보가 일치하지 않습니다");
         }
     }
 

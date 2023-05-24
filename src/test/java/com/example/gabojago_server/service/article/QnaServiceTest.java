@@ -5,6 +5,7 @@ import com.example.gabojago_server.dto.response.article.qna.QnaResponseDto;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.Qna.QnaArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.context.annotation.Import;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({QnaService.class, JpaConfig.class})
+@Import({QnaService.class, JpaConfig.class, EntityFinder.class})
 class QnaServiceTest {
 
     @Autowired

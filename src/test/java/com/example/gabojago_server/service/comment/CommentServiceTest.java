@@ -9,6 +9,7 @@ import com.example.gabojago_server.repository.article.accompany.AccompanyArticle
 import com.example.gabojago_server.repository.articlecomment.ArticleCommentRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
 import com.example.gabojago_server.service.alarm.AlarmService;
+import com.example.gabojago_server.service.common.EntityFinder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import({CommentService.class,
         JpaConfig.class,
-        AlarmService.class
+        AlarmService.class,
+        EntityFinder.class
 })
 class CommentServiceTest {
 

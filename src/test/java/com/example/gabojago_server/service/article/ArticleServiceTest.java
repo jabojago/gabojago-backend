@@ -6,6 +6,7 @@ import com.example.gabojago_server.dto.response.article.community.OneArticleResp
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.article.article.ArticleRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import com.example.gabojago_server.steps.MemberStep;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,10 @@ import org.springframework.data.domain.PageRequest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({JpaConfig.class, ArticleService.class})
+@Import({JpaConfig.class,
+        ArticleService.class,
+        EntityFinder.class
+})
 class ArticleServiceTest {
 
     @Autowired

@@ -4,6 +4,8 @@ import com.example.gabojago_server.dto.TokenDto;
 import com.example.gabojago_server.dto.request.member.LoginRequestDto;
 import com.example.gabojago_server.dto.request.member.MemberRequestDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.member.MemberRepository;
@@ -28,7 +30,7 @@ public class AuthService {
 
     public MemberResponseDto joinMember(MemberRequestDto requestDto) {
         if (memberRepository.existsByEmail(requestDto.getEmail())) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다");
+            throw new GabojagoException(ErrorCode.ALREADY_MEMBER);
         }
 
         Member member = requestDto.toMember(passwordEncoder);

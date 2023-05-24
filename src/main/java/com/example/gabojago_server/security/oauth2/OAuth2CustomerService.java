@@ -1,5 +1,7 @@
 package com.example.gabojago_server.security.oauth2;
 
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.member.Authority;
 import com.example.gabojago_server.model.member.Member;
 import com.example.gabojago_server.repository.member.MemberRepository;
@@ -28,9 +30,15 @@ public class OAuth2CustomerService extends DefaultOAuth2UserService {
         KakaoMember kakaoMember = new KakaoMember(oAuth2User.getAttributes());
 
         if (!memberRepository.existsByEmail(kakaoMember.getEmail())) createAndSave(kakaoMember);
-        Member member = memberRepository.findByEmail(kakaoMember.getEmail()).orElseThrow(IllegalStateException::new);
+        Member member = findMember(kakaoMember.getEmail());
 
         return new DefaultOAuth2User(oAuth2User.getAuthorities(), Map.of("id", member.getId()), "id");
+    }
+
+    private Member findMember(String email) {
+        return memberRepository
+                .findByEmail(email)
+                .orElseThrow(() -> new GabojagoException(ErrorCode.KAKAO_LOGIN, "카카오 정보로 회원 정보를 가져올 수 없습니다."));
     }
 
     private Member createAndSave(KakaoMember kakaoMember) {

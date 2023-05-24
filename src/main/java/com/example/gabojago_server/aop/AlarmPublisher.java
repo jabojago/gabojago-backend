@@ -2,6 +2,8 @@ package com.example.gabojago_server.aop;
 
 import com.example.gabojago_server.dto.response.comment.CommentResponseDto;
 import com.example.gabojago_server.dto.response.like.LikeResponseDto;
+import com.example.gabojago_server.error.ErrorCode;
+import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.event.AlarmEvent;
 import com.example.gabojago_server.model.alarm.AlarmType;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +36,7 @@ public class AlarmPublisher {
             LikeResponseDto like = (LikeResponseDto) result;
             return new AlarmArgs(like.getLikeId(), AlarmType.LIKE);
         }
-        throw new IllegalArgumentException("지원하지 않는 알람 기능 입니다.");
+        throw new GabojagoException(ErrorCode.UNSUPPORTED_ALARM);
     }
 
     static class AlarmArgs {

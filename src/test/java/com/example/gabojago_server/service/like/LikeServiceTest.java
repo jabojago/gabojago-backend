@@ -4,10 +4,10 @@ import com.example.gabojago_server.config.JpaConfig;
 import com.example.gabojago_server.model.article.AccompanyArticle;
 import com.example.gabojago_server.model.article.Article;
 import com.example.gabojago_server.model.member.Member;
-import com.example.gabojago_server.repository.article.accompany.AccompanyArticleRepository;
 import com.example.gabojago_server.repository.article.article.ArticleRepository;
 import com.example.gabojago_server.repository.like.LikeRepository;
 import com.example.gabojago_server.repository.member.MemberRepository;
+import com.example.gabojago_server.service.common.EntityFinder;
 import com.example.gabojago_server.steps.ArticleStep;
 import com.example.gabojago_server.steps.MemberStep;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,10 @@ import org.springframework.context.annotation.Import;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({LikeService.class, JpaConfig.class})
+@Import({LikeService.class,
+        JpaConfig.class,
+        EntityFinder.class
+})
 class LikeServiceTest {
 
     @Autowired
@@ -30,8 +33,6 @@ class LikeServiceTest {
     private MemberRepository memberRepository;
     @Autowired
     private LikeRepository likeRepository;
-    @Autowired
-    private AccompanyArticleRepository accompanyArticleRepository;
 
     private MemberStep memberStep;
     private ArticleStep articleStep;
