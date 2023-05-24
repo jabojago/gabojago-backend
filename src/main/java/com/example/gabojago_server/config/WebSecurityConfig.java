@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -42,6 +43,7 @@ public class WebSecurityConfig {
                 .antMatchers("/auth/findPw/**").permitAll()
                 .antMatchers("/auth/login/**").permitAll()
                 .antMatchers("/login/**").permitAll()
+                .antMatchers("/error/**").permitAll()
                 .antMatchers("/oauth2/**").permitAll()
                 .antMatchers("/api/accompany/**").permitAll()
                 .antMatchers("/api/qna/**").permitAll()
@@ -52,7 +54,15 @@ public class WebSecurityConfig {
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtSecurityConfig(jwtTokenProvider));
-        http.oauth2Login().defaultSuccessUrl("/auth/token").userInfoEndpoint().userService(oAuth2CustomerService);
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/error/login"));
+
+        http.oauth2Login()
+                .defaultSuccessUrl("/auth/token")
+                .userInfoEndpoint()
+                .userService(oAuth2CustomerService);
+
         return http.build();
     }
 
