@@ -261,7 +261,7 @@ class QnaControllerTest {
                 .title("테스트 제목")
                 .content("테스트 내용")
                 .review(1)
-                .selected(false)
+                .selected(true)
                 .isWritten(true)
                 .build();
     }
@@ -270,7 +270,7 @@ class QnaControllerTest {
         return QnaRequestDto.builder()
                 .title("제목")
                 .content("내용")
-                .selected(false)
+                .selected(true)
                 .build();
     }
 
