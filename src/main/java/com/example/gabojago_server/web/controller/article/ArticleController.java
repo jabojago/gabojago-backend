@@ -5,6 +5,7 @@ import com.example.gabojago_server.dto.request.article.ArticleRequestDto;
 import com.example.gabojago_server.dto.response.NormalResponse;
 import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
 import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.PageArticleResponseDto;
 import com.example.gabojago_server.service.article.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/posts")
-    public ResponseEntity<Page<ArticleResponseDto>> getArticleList(@PageableDefault Pageable pageable) {
+    public ResponseEntity<Page<PageArticleResponseDto>> getArticleList(@PageableDefault Pageable pageable) {
         return ResponseEntity.ok(articleService.allArticle(pageable));
     }
 
