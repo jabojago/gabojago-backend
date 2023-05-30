@@ -2,6 +2,7 @@ package com.example.gabojago_server.service.article;
 
 import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
 import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.PageArticleResponseDto;
 import com.example.gabojago_server.error.ErrorCode;
 import com.example.gabojago_server.error.GabojagoException;
 import com.example.gabojago_server.model.article.Article;
@@ -22,8 +23,8 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final EntityFinder entityFinder;
 
-    public Page<ArticleResponseDto> allArticle(Pageable pageable) {
-        return articleRepository.findAll(pageable).map(ArticleResponseDto::from);
+    public Page<PageArticleResponseDto> allArticle(Pageable pageable) {
+        return articleRepository.searchAll(pageable);
     }
 
     public OneArticleResponseDto oneArticle(Long memberId, Long articleId) {

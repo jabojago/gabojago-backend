@@ -4,6 +4,7 @@ import com.example.gabojago_server.config.TestSecurityConfig;
 import com.example.gabojago_server.dto.request.article.ArticleRequestDto;
 import com.example.gabojago_server.dto.response.article.community.ArticleResponseDto;
 import com.example.gabojago_server.dto.response.article.community.OneArticleResponseDto;
+import com.example.gabojago_server.dto.response.article.community.PageArticleResponseDto;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.service.article.ArticleService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -69,14 +70,14 @@ class CommunityControllerTest {
     @Test
     @DisplayName("[GET] [/api/articles/posts] 커뮤니티 게시판 모두 조회")
     public void getCommunityListTest() throws Exception {
-        Pageable pageable = PageRequest.of(0, 10);
+        PageRequest pageRequest = PageRequest.of(0, 10);
 
-        given(articleService.allArticle(pageable))
-                .willReturn(stub(pageable));
+        given(articleService.allArticle(pageRequest))
+                .willReturn(stubPageArticleResponseDto(pageRequest));
 
         mockMvc.perform(get("/api/articles/posts")
-                        .param("page", String.valueOf(pageable.getPageNumber()))
-                        .param("size", String.valueOf(pageable.getPageSize())))
+                        .param("page", String.valueOf(pageRequest.getPageNumber()))
+                        .param("size", String.valueOf(pageRequest.getPageSize())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(handler().methodName("getArticleList"))
@@ -207,30 +208,29 @@ class CommunityControllerTest {
                 ));
     }
 
-    private Page<ArticleResponseDto> stub(Pageable pageable) {
-        ArticleResponseDto response = ArticleResponseDto.builder()
-                .articleId(1L)
+    private Page<PageArticleResponseDto> stubPageArticleResponseDto(Pageable pageable) {
+        PageArticleResponseDto response = PageArticleResponseDto.builder()
+                .id(1L)
                 .nickname("test")
                 .title("테스트 제목")
                 .content("테스트 내용")
                 .review(3)
                 .build();
 
-        ArticleResponseDto other = ArticleResponseDto.builder()
-                .articleId(2L)
+        PageArticleResponseDto other = PageArticleResponseDto.builder()
+                .id(2L)
                 .nickname("test")
                 .title("테스트 제목 2")
                 .content("테스트 내용 2")
                 .review(999)
                 .build();
-
         return new PageImpl<>(List.of(response, other), pageable, 2);
     }
 
 
     private Map<String, String> createPageArticleResponseDtoResponseBody() {
         return Map.of(
-                "content[].articleId", "커뮤니티글 ID",
+                "content[].id", "커뮤니티글 ID",
                 "content[].nickname", "작성자 닉네임",
                 "content[].title", "커뮤니티글 제목",
                 "content[].content", "커뮤니티글 내용",

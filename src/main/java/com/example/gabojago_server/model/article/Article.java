@@ -14,6 +14,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "article_type", discriminatorType = DiscriminatorType.STRING)
 @ToString(exclude = "writer")
 @Table(name = "articles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

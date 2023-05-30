@@ -35,8 +35,7 @@ public class QnaService {
 
     public Page<PageQnaResponseDto> allQna(Pageable pageable) {
         return qnaArticleRepository
-                .findAll(pageable)
-                .map(PageQnaResponseDto::of);
+                .searchAll(pageable);
     }
 
     @Transactional
