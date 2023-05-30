@@ -36,9 +36,7 @@ public class AccompanyService {
     }
 
     public Page<PageAccompanyResponseDto> allAccompany(Pageable pageable) {
-        return articleRepository
-                .findAll(pageable)
-                .map(PageAccompanyResponseDto::of);
+        return articleRepository.searchAll(pageable);
     }
 
     @Transactional

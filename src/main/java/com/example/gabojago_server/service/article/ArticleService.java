@@ -24,7 +24,7 @@ public class ArticleService {
     private final EntityFinder entityFinder;
 
     public Page<PageArticleResponseDto> allArticle(Pageable pageable) {
-        return articleRepository.findAll(pageable).map(PageArticleResponseDto::of);
+        return articleRepository.searchAll(pageable);
     }
 
     public OneArticleResponseDto oneArticle(Long memberId, Long articleId) {
