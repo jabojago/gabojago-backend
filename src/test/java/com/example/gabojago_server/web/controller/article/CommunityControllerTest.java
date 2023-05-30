@@ -209,20 +209,28 @@ class CommunityControllerTest {
     }
 
     private Page<PageArticleResponseDto> stubPageArticleResponseDto(Pageable pageable) {
-        PageArticleResponseDto stub = PageArticleResponseDto.builder()
+        PageArticleResponseDto response = PageArticleResponseDto.builder()
                 .id(1L)
-                .nickname("테스트 닉네임")
-                .title("제목")
-                .content("내용")
-                .review(99)
+                .nickname("test")
+                .title("테스트 제목")
+                .content("테스트 내용")
+                .review(3)
                 .build();
-        return new PageImpl<>(List.of(stub), pageable, 1);
+
+        PageArticleResponseDto other = PageArticleResponseDto.builder()
+                .id(2L)
+                .nickname("test")
+                .title("테스트 제목 2")
+                .content("테스트 내용 2")
+                .review(999)
+                .build();
+        return new PageImpl<>(List.of(response, other), pageable, 2);
     }
 
 
     private Map<String, String> createPageArticleResponseDtoResponseBody() {
         return Map.of(
-                "content[].articleId", "커뮤니티글 ID",
+                "content[].id", "커뮤니티글 ID",
                 "content[].nickname", "작성자 닉네임",
                 "content[].title", "커뮤니티글 제목",
                 "content[].content", "커뮤니티글 내용",
