@@ -145,7 +145,7 @@ class ArticleServiceTest {
         Page<PageArticleResponseDto> response = articleService.allArticle(PageRequest.of(0, 10));
 
         // then
-        assertThat(response.getContent().size()).isEqualTo(10);
+        assertThat(response.getSize()).isEqualTo(10);
         assertThat(response.getTotalPages()).isEqualTo(20);
     }
 
