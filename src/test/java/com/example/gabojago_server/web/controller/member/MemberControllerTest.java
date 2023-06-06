@@ -5,6 +5,7 @@ import com.example.gabojago_server.dto.request.member.ChangeNickNameRequestDto;
 import com.example.gabojago_server.dto.request.member.ChangePasswordRequestDto;
 import com.example.gabojago_server.dto.request.member.ChangePhoneRequestDto;
 import com.example.gabojago_server.dto.response.member.AlarmResponseDto;
+import com.example.gabojago_server.dto.response.member.MemberInfoResponseDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.jwt.JwtTokenProvider;
 import com.example.gabojago_server.model.alarm.AlarmEntity;
@@ -81,7 +82,7 @@ class MemberControllerTest {
     @WithMockUser(value = "1")
     public void myInfoTest() throws Exception {
         given(memberService.getMyInfo())
-                .willReturn(createMemberResponseDto());
+                .willReturn(createMemberInfoResponseDto());
 
         mockMvc.perform(get("/api/members/myInfo")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer ${AccessToken}")
@@ -94,7 +95,9 @@ class MemberControllerTest {
                         Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
                         responseFields(
                                 fieldWithPath("email").description("회원 이메일"),
-                                fieldWithPath("nickname").description("회원 닉네임")
+                                fieldWithPath("nickname").description("회원 닉네임"),
+                                fieldWithPath("birth").description("회원 생년월일"),
+                                fieldWithPath("phone").description("회원 핸드폰 번호")
                         )
                 ));
     }
@@ -264,6 +267,15 @@ class MemberControllerTest {
         return MemberResponseDto.builder()
                 .email("test@test.com")
                 .nickname("test")
+                .build();
+    }
+
+    private MemberInfoResponseDto createMemberInfoResponseDto() {
+        return MemberInfoResponseDto.builder()
+                .email("test@test.com")
+                .nickname("test")
+                .birth("2021-12-31")
+                .phone("010-0000-0000")
                 .build();
     }
 
