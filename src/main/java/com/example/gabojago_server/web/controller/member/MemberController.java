@@ -4,6 +4,7 @@ import com.example.gabojago_server.dto.request.member.ChangeNickNameRequestDto;
 import com.example.gabojago_server.dto.request.member.ChangePasswordRequestDto;
 import com.example.gabojago_server.dto.request.member.ChangePhoneRequestDto;
 import com.example.gabojago_server.dto.response.member.AlarmResponseDto;
+import com.example.gabojago_server.dto.response.member.MemberInfoResponseDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.service.alarm.AlarmService;
 import com.example.gabojago_server.service.member.MemberService;
@@ -27,8 +28,8 @@ public class MemberController {
     private final AlarmService alarmService;
 
     @GetMapping("/myInfo")
-    public ResponseEntity<MemberResponseDto> getMyMemberInfo() {
-        MemberResponseDto response = memberService.getMyInfo();
+    public ResponseEntity<MemberInfoResponseDto> getMyMemberInfo() {
+        MemberInfoResponseDto response = memberService.getMyInfo();
         return ResponseEntity.ok((response));
     }
 
