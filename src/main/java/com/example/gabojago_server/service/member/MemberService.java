@@ -1,6 +1,7 @@
 package com.example.gabojago_server.service.member;
 
 import com.example.gabojago_server.config.SecurityUtil;
+import com.example.gabojago_server.dto.response.member.MemberInfoResponseDto;
 import com.example.gabojago_server.dto.response.member.MemberResponseDto;
 import com.example.gabojago_server.error.ErrorCode;
 import com.example.gabojago_server.error.GabojagoException;
@@ -23,9 +24,9 @@ public class MemberService {
     private final EntityFinder entityFinder;
 
     //header의 token 값을 토대로 member의 data 반환
-    public MemberResponseDto getMyInfo() {
+    public MemberInfoResponseDto getMyInfo() {
         return memberRepository.findById(SecurityUtil.getCurrentMemberIdx())
-                .map(MemberResponseDto::of)
+                .map(MemberInfoResponseDto::of)
                 .orElseThrow(() -> new GabojagoException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
